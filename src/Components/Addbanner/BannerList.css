@@ -1,0 +1,88 @@
+.bannerlist-container{
+padding:20px;
+background:#fff;
+border-radius:8px;
+box-shadow:0 2px 8px rgba(0,0,0,0.08);
+}
+
+.bannerlist-title{
+margin-bottom:20px;
+font-size:22px;
+font-weight:600;
+color:#333;
+}
+
+/* Table */
+
+.bannerlist-table{
+width:100%;
+border-collapse:collapse;
+}
+
+.bannerlist-table th{
+padding:12px;
+/* border-bottom: 1px solid #eee; */
+text-align:center;
+}
+
+.bannerlist-table th{
+background:#f6f7f7;
+font-weight:600;
+}
+
+.bannerlist-table tr:hover{
+background:#fafafa;
+}
+
+/* Image */
+
+
+
+/* Buttons */
+
+.bannerlist-edit{
+background:#2271b1;
+color:white;
+border:none;
+padding:6px 12px;
+margin-right:5px;
+cursor:pointer;
+border-radius:4px;
+}
+
+.bannerlist-delete{
+background:#d63638;
+color:white;
+border:none;
+padding:6px 12px;
+cursor:pointer;
+border-radius:4px;
+}
+
+.bannerlist-edit:hover{
+background:#135e96;
+}
+
+.bannerlist-delete:hover{
+background:#b32d2e;
+}
+.bannerlist-images{
+display:flex;
+gap:8px;
+justify-content:center;
+flex-wrap:wrap;
+cursor: pointer;
+}
+
+.bannerlist-image{
+width:80px;
+height:45px;
+object-fit:cover;
+border-radius:5px;
+border:1px solid #ddd;
+}
+table td {
+    padding: 12px;
+    border-bottom: none; 
+    text-align: center;
+}

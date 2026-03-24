@@ -1,0 +1,115 @@
+/* Apply box-sizing fix */
+
+* {
+  box-sizing: border-box;
+}
+
+/* Container */
+
+.add-product-container {
+  /* padding: 30px; */
+  background: #f4f6f9;
+  min-height: 100vh;
+}
+
+.add-product-container h2 {
+  margin-bottom: 20px;
+}
+
+
+/* Form */
+
+.product-form {
+  background: #fff;
+  padding: 25px;
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+
+/* Grid Layout */
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  width: 100%;
+}
+/* .product-form .form-group {
+    margin-bottom: 0px;
+    display: flex;
+    flex-direction: column;
+} */
+
+/* Form Group */
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.form-group label {
+  margin-bottom: 6px;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+
+/* Inputs */
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+
+/* Textarea */
+
+textarea {
+  min-height: 90px;
+  resize: none;
+}
+
+
+/* Full width field */
+
+.form-group.full {
+  grid-column: span 3;
+  margin-top: 20px;
+}
+
+
+/* Button */
+
+.submit-btn {
+  margin-top: 25px;
+  padding: 12px;
+  background: #2271b1;
+  border: none;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 15px;
+  width: 200px;
+}
+
+.submit-btn:hover {
+  background: #135e96;
+}
+element.style {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+.error {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+}

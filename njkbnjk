@@ -1,0 +1,6 @@
+axios.delete(`http://localhost:5000/api/categories/delete-category/${id}`)
+
+axios.put(
+  `http://localhost:5000/api/categories/update-category/${id}`,
+  formData
+)

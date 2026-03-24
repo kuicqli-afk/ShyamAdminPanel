@@ -1,0 +1,139 @@
+.product-list {
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* Heading */
+
+.product-list h2 {
+  margin-bottom: 20px;
+  font-size: 22px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Table */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  font-size: 14px;
+}
+
+table th,
+table td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+}
+
+table th {
+  background: #f6f7f7;
+  color: #444;
+  font-weight: 600;
+}
+
+table tr:hover {
+  background: #fafafa;
+}
+
+/* Product Image */
+
+table img {
+  width: 80px;
+  /* height: 80px; */
+  object-fit: cover;
+  border-radius: 6px;
+  /* border: 1px solid #eee; */
+}
+
+/* Buttons */
+
+.edit-btn {
+  background: #2271b1;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  margin-right: 5px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.delete-btn {
+  background: #d63638;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.edit-btn:hover {
+  background: #135e96;
+}
+
+.delete-btn:hover {
+  background: #b32d2e;
+}
+
+/* Pagination */
+
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.pagination span {
+  font-size: 14px;
+  color: #555;
+}
+
+.pagination button {
+  padding: 7px 14px;
+  border: none;
+  background: #2271b1;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.pagination button:hover {
+  background: #135e96;
+}
+
+.pagination button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+/* Search Box */
+
+.table-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:15px;
+}
+
+.search-box{
+  padding:8px 12px;
+  width:220px;
+  border:1px solid #ccc;
+  border-radius:5px;
+  font-size:14px;
+  outline:none;
+  transition:0.3s;
+}
+
+.search-box:focus{
+  border-color:#2271b1;
+  box-shadow:0 0 4px rgba(34,113,177,0.3);
+}
