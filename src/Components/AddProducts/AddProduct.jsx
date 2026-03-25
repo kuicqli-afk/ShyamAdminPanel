@@ -67,6 +67,7 @@ function AddProduct() {
       return updated;
     });
   };
+  
   const mainImageRef = useRef();
   const galleryInputRef = useRef();
   const [errors, setErrors] = useState({});
