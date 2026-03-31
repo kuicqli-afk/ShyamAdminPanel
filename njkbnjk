@@ -1,6 +1,472 @@
-axios.delete(`http://localhost:5000/api/categories/delete-category/${id}`)
+import React, { useEffect, useState, useRef } from "react";
+import "./Category.css";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import { FiUpload } from "react-icons/fi";
+import { MdDelete } from "react-icons/md";
+import { BiMenu } from "react-icons/bi";
+import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-axios.put(
-  `http://localhost:5000/api/categories/update-category/${id}`,
-  formData
-)
+const initialCategory = {
+  name: "",
+  categoryImage: null,
+  bannerImages: [],
+  displayType: "default",
+};
+
+const Category = () => {
+  const [category, setCategory] = useState(initialCategory);
+  const [categories, setCategories] = useState([]);
+  const [categoryImage, setCategoryImage] = useState(null);
+  const [editingCategory, setEditingCategory] = useState(null);
+  const [uploadStatus, setUploadStatus] = useState("idle");
+  const [search, setSearch] = useState("");
+  const [selected, setSelected] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
+  const [bulkAction, setBulkAction] = useState("");
+  const [parentCategory, setParentCategory] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 4;
+
+  const galleryInputRef = useRef();
+
+  // ================= FETCH CATEGORIES =================
+  const fetchCategories = async () => {
+    try {
+      const res = await axios.get(
+        "http://localhost:5000/api/categories/category-list"
+      );
+      setCategories(res.data.categories);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search]);
+
+  // ================= FORM HANDLERS =================
+  const handleChange = (e) =>
+    setCategory((prev) => ({ ...prev, name: e.target.value }));
+
+  const handleGalleryChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const image = { file, preview: URL.createObjectURL(file) };
+    setCategoryImage(image);
+    setCategory((prev) => ({ ...prev, categoryImage: file }));
+  };
+
+  const handleRemoveGalleryImage = () => {
+    setCategoryImage(null);
+    setCategory((prev) => ({ ...prev, categoryImage: null }));
+  };
+
+  const validateForm = () => {
+    const errors = {};
+    if (!category.name.trim()) errors.name = "Category name required";
+    if (!category.categoryImage && !editingCategory)
+      errors.categoryImage = "Image required";
+    return errors;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const validation = validateForm();
+    if (Object.keys(validation).length > 0) return;
+
+    setUploadStatus("uploading");
+
+    const formData = new FormData();
+    formData.append("name", category.name);
+    if (category.categoryImage)
+      formData.append("categoryImage", category.categoryImage);
+    formData.append("displayType", category.displayType);
+    formData.append("parentCategory", parentCategory);
+
+    try {
+      if (editingCategory) {
+        await axios.put(
+          `http://localhost:5000/api/categories/update/${editingCategory._id}`,
+          formData,
+          { headers: { "Content-Type": "multipart/form-data" } }
+        );
+        toast.success("Category updated successfully ✅");
+      } else {
+        await axios.post(
+          "http://localhost:5000/api/categories/add-category",
+          formData,
+          { headers: { "Content-Type": "multipart/form-data" } }
+        );
+        toast.success("Category added successfully ✅");
+      }
+
+      setUploadStatus("success");
+      setCategory(initialCategory);
+      setCategoryImage(null);
+      setEditingCategory(null);
+      setParentCategory("");
+      fetchCategories();
+      setTimeout(() => setUploadStatus("idle"), 2000);
+    } catch (err) {
+      console.log(err);
+      setUploadStatus("error");
+      toast.error("Something went wrong ❌");
+    }
+  };
+
+  const handleEditClick = (cat) => {
+    setEditingCategory(cat);
+    setCategory({
+      name: cat.name || "",
+      categoryImage: null,
+      bannerImages: [],
+      displayType: cat.displayType || "default",
+    });
+    setParentCategory(cat.parent || "");
+
+    if (cat.image) {
+      setCategoryImage({ preview: `http://localhost:5000/uploads/${cat.image}` });
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/categories/delete/${id}`);
+      toast.success("Category deleted 🗑️");
+      fetchCategories();
+    } catch {
+      toast.error("Delete failed ❌");
+    }
+  };
+
+  const handleHide = async (id) => {
+    await axios.put(`http://localhost:5000/api/categories/toggle-hide/${id}`);
+    toast.info("Category visibility toggled");
+    fetchCategories();
+  };
+
+  // ================= BULK ACTIONS =================
+  const toggleSelect = (id) => {
+    let updated = selected.includes(id)
+      ? selected.filter((i) => i !== id)
+      : [...selected, id];
+    setSelected(updated);
+    setSelectAll(updated.length === filteredCategories.length);
+  };
+
+  const handleSelectAll = () => {
+    if (selectAll) setSelected([]);
+    else setSelected(filteredCategories.map((cat) => cat._id));
+    setSelectAll(!selectAll);
+  };
+
+  const handleBulkAction = async () => {
+    if (!bulkAction) return toast.warning("Select action first");
+    if (selected.length === 0) return toast.warning("No categories selected");
+
+    try {
+      if (bulkAction === "delete") {
+        if (!window.confirm("Delete selected categories?")) return;
+        await Promise.all(
+          selected.map((id) =>
+            axios.delete(`http://localhost:5000/api/categories/delete/${id}`)
+          )
+        );
+      }
+      if (bulkAction === "hide") {
+        await Promise.all(
+          selected.map((id) =>
+            axios.put(`http://localhost:5000/api/categories/toggle-hide/${id}`)
+          )
+        );
+      }
+
+      setSelected([]);
+      setSelectAll(false);
+      fetchCategories();
+      toast.success("Bulk action applied ✅");
+    } catch {
+      toast.error("Error ❌");
+    }
+  };
+
+  // ================= BUILD TREE =================
+  const buildTree = (data) => {
+    const map = {};
+    const roots = [];
+    data.forEach((cat) => (map[cat._id] = { ...cat, children: [] }));
+    data.forEach((cat) =>
+      cat.parent && map[cat.parent]
+        ? map[cat.parent].children.push(map[cat._id])
+        : roots.push(map[cat._id])
+    );
+    return roots;
+  };
+
+  const filteredCategories = categories.filter((cat) =>
+    cat.name.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const categoryTree = buildTree(filteredCategories);
+
+  const indexOfLast = currentPage * itemsPerPage;
+  const indexOfFirst = indexOfLast - itemsPerPage;
+  const paginatedTree = categoryTree.slice(indexOfFirst, indexOfLast);
+  const totalPages = Math.ceil(categoryTree.length / itemsPerPage);
+
+  // ================= DRAG & DROP =================
+  const handleDragEnd = async (result) => {
+    if (!result.destination) return;
+    const items = Array.from(categoryTree);
+    const [moved] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, moved);
+    setCategories(items); // reorder top-level categories
+
+    try {
+      await axios.put("http://localhost:5000/api/categories/update-order", {
+        categories: items.map((cat, index) => ({ id: cat._id, order: index })),
+      });
+    } catch {
+      toast.error("Something went wrong ❌");
+    }
+  };
+
+  // ================= RENDER TREE =================
+  const renderTree = (nodes, level = 0) =>
+    nodes.map((cat, index) => (
+      <React.Fragment key={cat._id}>
+        <Draggable draggableId={cat._id} index={index}>
+          {(provided) => (
+            <tr ref={provided.innerRef} {...provided.draggableProps}>
+              <td>
+                <input
+                  type="checkbox"
+                  checked={selected.includes(cat._id)}
+                  onChange={() => toggleSelect(cat._id)}
+                />
+              </td>
+              <td>
+                <img src={`http://localhost:5000/uploads/${cat.image}`} alt="" />
+              </td>
+              <td style={{ paddingLeft: `${level * 25}px` }}>
+                {level > 0 && "— "} {cat.name}
+              </td>
+              <td>
+                {new Date(cat.createdAt).toLocaleDateString()}{" "}
+                {new Date(cat.createdAt).toLocaleTimeString()}
+              </td>
+              <td>
+                {cat.hidden ? (
+                  <span style={{ color: "red" }}>Hidden</span>
+                ) : (
+                  <span style={{ color: "green" }}>Visible</span>
+                )}
+              </td>
+              <td>
+                <button className="edit" onClick={() => handleEditClick(cat)}>
+                  Edit
+                </button>
+                <button className="hide" onClick={() => handleHide(cat._id)}>
+                  {cat.hidden ? "Unhide" : "Hide"}
+                </button>
+                <button className="delete" onClick={() => handleDelete(cat._id)}>
+                  Delete
+                </button>
+              </td>
+              <td {...provided.dragHandleProps}>
+                <BiMenu />
+              </td>
+            </tr>
+          )}
+        </Draggable>
+
+        {cat.children && renderTree(cat.children, level + 1)}
+      </React.Fragment>
+    ));
+
+  const renderCategoryOptions = (nodes, level = 0) =>
+    nodes.map((cat) => (
+      <React.Fragment key={cat._id}>
+        <option value={cat._id}>{"— ".repeat(level) + cat.name}</option>
+        {cat.children && renderCategoryOptions(cat.children, level + 1)}
+      </React.Fragment>
+    ));
+
+  // ================= UI =================
+  return (
+    <div className="admin-layout">
+      {/* LEFT FORM */}
+      <div className="left-panel">
+        <form className="product-form" onSubmit={handleSubmit}>
+          <h2>Product Categories</h2>
+          <label>Name</label>
+          <input
+            type="text"
+            placeholder="Enter category name"
+            value={category.name}
+            onChange={handleChange}
+          />
+
+          <label>Parent Category</label>
+          <select
+            value={parentCategory}
+            onChange={(e) => setParentCategory(e.target.value)}
+          >
+            <option value="">None</option>
+            {renderCategoryOptions(categoryTree)}
+          </select>
+
+          <label>Display Type</label>
+          <select
+            value={category.displayType || "default"}
+            onChange={(e) =>
+              setCategory((prev) => ({ ...prev, displayType: e.target.value }))
+            }
+          >
+            <option value="default">Default</option>
+            <option value="products">Products</option>
+            <option value="subcategories">Subcategories</option>
+            <option value="both">Both</option>
+          </select>
+
+          <div className="form-group full">
+            <label>Category Image</label>
+            <small>Category Image Size 160px X 160px</small>
+            <div style={{ display: "flex", gap: "60px", flexWrap: "wrap" }}>
+              {categoryImage ? (
+                <div className="image-upload-wrapper">
+                  <div className="image-upload-box">
+                    <img src={categoryImage.preview} alt="preview" />
+                    <div className="image-overlay">
+                      <div
+                        className="delete-icon"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleRemoveGalleryImage();
+                        }}
+                      >
+                        <MdDelete />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div
+                  className="image-upload-box"
+                  onClick={() => galleryInputRef.current.click()}
+                >
+                  <div className="upload-placeholder">
+                    <FiUpload />
+                    <p>Upload</p>
+                  </div>
+                </div>
+              )}
+              <input
+                type="file"
+                hidden
+                ref={galleryInputRef}
+                accept="image/*"
+                onChange={handleGalleryChange}
+              />
+            </div>
+          </div>
+
+          <button type="submit" className="primary-btn">
+            {uploadStatus === "uploading"
+              ? editingCategory
+                ? "Updating..."
+                : "Adding..."
+              : editingCategory
+              ? "Update Category"
+              : "Add New Category"}
+          </button>
+        </form>
+      </div>
+
+      {/* RIGHT TABLE */}
+      <div className="right-panel">
+        <div className="table-header">
+          <div className="left-actions">
+            <select onChange={(e) => setBulkAction(e.target.value)}>
+              <option value="">Bulk actions</option>
+              <option value="delete">Delete</option>
+              <option value="hide">Hide</option>
+            </select>
+            <button className="apply-btn" onClick={handleBulkAction}>
+              Apply
+            </button>
+          </div>
+
+          <div className="right-actions">
+            <input
+              type="text"
+              placeholder="Search categories"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
+        </div>
+
+        <DragDropContext onDragEnd={handleDragEnd}>
+          <Droppable droppableId="categories">
+            {(provided) => (
+              <table
+                className="category-table"
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+              >
+                <thead>
+                  <tr>
+                    <th>
+                      <input
+                        type="checkbox"
+                        checked={selectAll}
+                        onChange={handleSelectAll}
+                      />
+                    </th>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Date & time</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>{renderTree(paginatedTree)}</tbody>
+              </table>
+            )}
+          </Droppable>
+        </DragDropContext>
+
+        {/* PAGINATION */}
+        <div className="pagination">
+          <button
+            onClick={() => setCurrentPage((prev) => prev - 1)}
+            disabled={currentPage === 1}
+          >
+            Prev
+          </button>
+          <span>
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={() => setCurrentPage((prev) => prev + 1)}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Category;

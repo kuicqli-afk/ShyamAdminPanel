@@ -10,7 +10,7 @@ function ProductList() {
 
   useEffect(() => {
 
-    axios.get("http://localhost:5000/api/products")
+    axios.get("https://shyambackend.onrender.com/api/products")
       .then((res) => {
         setProducts(res.data.products);
       })
@@ -76,14 +76,14 @@ function ProductList() {
               <td>
                 <img
                   className="product-img"
-                  src={`http://localhost:5000/uploads/${product.image}`}
+                  src={product.image}
                   alt={product.title}
                 />
               </td>
 
               <td>{product.title}</td>
 
-              <td>{product.category?.name}</td>
+              <td>{product.name}</td>
 
               <td>₹{product.price}</td>
 

@@ -1,74 +1,77 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import "./CategoryList.css";
+// import React, { useEffect, useState } from "react";
+// import axios from "axios";
+// import "./CategoryList.css";
 
-function CategoryList() {
+// function CategoryList() {
 
-  const [categories, setCategories] = useState([]);
+//   const [categories, setCategories] = useState([]);
 
-  useEffect(() => {
+//   useEffect(() => {
 
-    axios.get("http://localhost:5000/api/categories/category-list")
-      .then((res) => {
-        setCategories(res.data.categories);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+//     axios.get("http://localhost:5000/api/categories/category-list")
+//       .then((res) => {
+//         setCategories(res.data.categories);
+//       })
+//       .catch((err) => {
+//         console.log(err);
+//       });
 
-  }, []);
+//   }, []);
 
-  return (
+//   return (
 
-    <div className="categorylist-container">
+//     <div className="categorylist-container">
 
-      <h2 className="categorylist-title">Category List</h2>
+//       <h2 className="categorylist-title">Category List</h2>
 
-      <table className="categorylist-table">
+//       <table className="categorylist-table">
 
-        <thead>
-          <tr>
-            <th>Sr.No</th>
-            <th>Category Image</th>
-            <th>Category Name</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
+//         <thead>
+//           <tr>
+//             <th>Sr.No</th>
+//             <th>Category Image</th>
+//             <th>Category Name</th>
+//             <th>Date & Time</th>
+//             <th>Actions</th>
+//           </tr>
+//         </thead>
 
-        <tbody>
+//         <tbody>
 
-          {categories.map((category, index) => (
+//           {categories.map((category, index) => (
 
-            <tr key={category._id}>
+//             <tr key={category._id}>
 
-              <td>{index + 1}</td>
+//               <td>{index + 1}</td>
 
-              <td>
-                <img
-                  className="categorylist-image"
-                  src={`http://localhost:5000/uploads/${category.image}`}
-                  alt={category.name}
-                />
-              </td>
+//               <td>
+//                 <img
+//                   className="categorylist-image"
+//                   src={`http://localhost:5000/uploads/${category.image}`}
+//                   alt={category.name}
+//                 />
+//               </td>
 
-              <td>{category.name}</td>
+//               <td>{category.name}</td>
+//               <td>{category.createdAt.split('T')[0]} {category.createdAt.split('T')[1]}</td>
 
-              <td>
-                <button className="categorylist-edit">Edit</button>
-                <button className="categorylist-delete">Delete</button>
-              </td>
+//               <td>
+//                 <button className="categorylist-edit">Edit</button>
+//                 <button className="categorylist-hide">Hide</button>
+//                 <button className="categorylist-delete">Delete</button>
+//               </td>
 
-            </tr>
+//             </tr>
 
-          ))}
+//           ))}
 
-        </tbody>
+//         </tbody>
 
-      </table>
+//       </table>
 
-    </div>
+//     </div>
 
-  );
-}
+//   );
+// }
 
-export default CategoryList;
+// export default CategoryList;

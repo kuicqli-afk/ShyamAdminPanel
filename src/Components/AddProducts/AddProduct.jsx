@@ -33,13 +33,13 @@ function AddProduct() {
   const [banner, setBanner] = useState([]);
   useEffect(() => {
 
-    axios.get("http://localhost:5000/api/categories/category-list")
+    axios.get("https://shyambackend.onrender.com/api/categories/category-list")
       .then((res) => {
         setCategories(res.data.categories);
       })
       .catch((err) => console.log(err));
 
-    axios.get("http://localhost:5000/api/banner")
+    axios.get("https://shyambackend.onrender.com/api/banner")
       .then((res) => {
         setBanner(res.data.banners);
       })
@@ -147,7 +147,7 @@ function AddProduct() {
 
     try {
       await axios.post(
-        "http://localhost:5000/api/products/add-product",
+        "https://shyambackend.onrender.com/api/products/add-product",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

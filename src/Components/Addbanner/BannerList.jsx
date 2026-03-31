@@ -8,7 +8,7 @@ function BannerList() {
 
     useEffect(() => {
 
-        axios.get("http://localhost:5000/api/banner")
+        axios.get("https://shyambackend.onrender.com/api/banner")
             .then((res) => {
                 setBanners(res.data.banners);
             })

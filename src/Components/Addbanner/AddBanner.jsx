@@ -2,7 +2,8 @@
 import React, { useState, useRef } from "react";
 import axios from "axios";
 import "./AddBanner.css";
-
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { FiUpload } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 
@@ -37,19 +38,19 @@ function AddBanner() {
 
     // Validation
     if (!sliderType) {
-      alert("Please select a slider type");
+      toast.warning("Please select a slider type");
       return;
     }
     if (!title) {
-      alert("Please enter banner title");
+      toast.warning("Please enter banner title");
       return;
     }
     if (sliderType === "offer" && (!off || off <= 0)) {
-      alert("Please enter a valid discount for offer slider");
+      toast("Please enter a valid discount for offer slider");
       return;
     }
     if (galleryImages.length === 0) {
-      alert("Please upload at least one image");
+      toast.warning("Please upload at least one image");
       return;
     }
 
@@ -62,13 +63,13 @@ function AddBanner() {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/banner/add-banner",
+        "https://shyambackend.onrender.com/api/banner/add-banner",
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
 
       console.log(res.data);
-      alert("Banner Added Successfully");
+      toast.success("Banner Added Successfully");
 
       // Reset form
       setTitle("");
@@ -77,7 +78,7 @@ function AddBanner() {
       setGalleryImages([]);
     } catch (error) {
       console.error(error);
-      alert("Error uploading banner");
+      toast.error("Error uploading banner");
     }
   };
 

@@ -1,0 +1,82 @@
+.admin-form {
+  background: #fff;
+  padding: 20px;
+  width: auto;
+  border-radius: 10px;
+  border: 1px solid #8c8f94;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group{
+  width: 100%;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+/* Image Upload */
+/* .image-upload-box {
+  width: 150px;
+  height: 150px;
+  border: 2px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+} */
+
+.image-upload-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.upload-placeholder {
+  text-align: center;
+  color: #777;
+}
+
+.image-overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 5px;
+}
+
+.delete-icon {
+  background: red;
+  color: #fff;
+  padding: 5px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* Button */
+.submit-btn {
+  background: #0073aa;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.submit-btn:hover {
+  background: #005f8d;
+}

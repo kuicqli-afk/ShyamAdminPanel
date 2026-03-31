@@ -8,7 +8,12 @@ import {
   AiOutlineShoppingCart
 } from "react-icons/ai";
 
-import { FaBoxOpen, FaChevronDown } from "react-icons/fa";
+import { FaChevronDown, FaSlidersH } from "react-icons/fa";
+import { BiCategory, BiCategoryAlt, BiSolidOffer } from "react-icons/bi";
+import { FaProductHunt } from "react-icons/fa6";
+import { MdCategory } from "react-icons/md";
+
+
 
 function Sidebar() {
 
@@ -40,7 +45,7 @@ function Sidebar() {
             className="menu-item"
             onClick={() => toggleMenu("products")}
           >
-            <FaBoxOpen />
+            <FaProductHunt />
             <span>Products</span>
 
             <FaChevronDown
@@ -65,8 +70,8 @@ function Sidebar() {
             className="menu-item"
             onClick={() => toggleMenu("banner")}
           >
-            <FaBoxOpen />
-            <span>Banner</span>
+            <FaSlidersH />
+            <span>Slider</span>
 
             <FaChevronDown
               className={`arrow ${openMenu === "banner" ? "open" : ""}`}
@@ -89,7 +94,7 @@ function Sidebar() {
             className="menu-item"
             onClick={() => toggleMenu("category")}
           >
-            <AiOutlineAppstore />
+            <BiCategoryAlt />
             <span>Categories</span>
 
             <FaChevronDown
@@ -102,9 +107,32 @@ function Sidebar() {
               <NavLink to="/category" className={({ isActive }) => (isActive ? "active" : "")}>Add Category</NavLink>
             </li>
 
-            <li>
+            {/* <li>
               <NavLink to="/category-list" >View Categories</NavLink>
+            </li> */}
+          </ul>
+        </li>
+        <li>
+          <div
+            className="menu-item"
+            onClick={() => toggleMenu("offers")}
+          >
+            <BiSolidOffer />
+            <span>Offers</span>
+
+            <FaChevronDown
+              className={`arrow ${openMenu === "offers" ? "open" : ""}`}
+            />
+          </div>
+
+          <ul className={`submenu ${openMenu === "offers" ? "show" : ""}`}>
+            <li>
+              <NavLink to="/offers" className={({ isActive }) => (isActive ? "active" : "")}>Add Offers</NavLink>
             </li>
+
+            {/* <li>
+              <NavLink to="/category-list" >View Categories</NavLink>
+            </li> */}
           </ul>
         </li>
 
