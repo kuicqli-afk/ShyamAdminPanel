@@ -50,7 +50,7 @@ function BannerList() {
                                         <img
                                             key={i}
                                             className="bannerlist-image"
-                                            src={`http://localhost:5000/uploads/${img}`}
+                                            src={img}
                                             alt="banner"
                                         />
                                     ))}

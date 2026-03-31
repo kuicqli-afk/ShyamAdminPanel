@@ -260,7 +260,7 @@ function AddProduct() {
             />
           </div>
 
-          <div className="form-group">
+          {/* <div className="form-group">
             <label>Rating</label>
             <input type="number" name="rating" value={product.rating} onChange={handleChange} />
           </div>
@@ -278,7 +278,7 @@ function AddProduct() {
           <div className="form-group">
             <label>Views</label>
             <input type="text" name="view" value={product.view} onChange={handleChange} />
-          </div>
+          </div> */}
 
           <div className="form-group">
             <label>Status</label>

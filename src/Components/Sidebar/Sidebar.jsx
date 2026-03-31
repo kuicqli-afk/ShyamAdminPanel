@@ -61,6 +61,11 @@ function Sidebar() {
             <li>
               <NavLink to="/products/list">Products List</NavLink>
             </li>
+
+            <li>
+              <NavLink to="/category" className={({ isActive }) => (isActive ? "active" : "")}>Add Category</NavLink>
+            </li>
+
           </ul>
         </li>
 
@@ -82,14 +87,14 @@ function Sidebar() {
             <li>
               <NavLink to="/add-banner">Add Banner</NavLink>
             </li>
-             <li>
+            <li>
               <NavLink to="banner-list">Banner List</NavLink>
             </li>
           </ul>
         </li>
 
         {/* Categories */}
-        <li>
+        {/* <li>
           <div
             className="menu-item"
             onClick={() => toggleMenu("category")}
@@ -102,16 +107,8 @@ function Sidebar() {
             />
           </div>
 
-          <ul className={`submenu ${openMenu === "category" ? "show" : ""}`}>
-            <li>
-              <NavLink to="/category" className={({ isActive }) => (isActive ? "active" : "")}>Add Category</NavLink>
-            </li>
 
-            {/* <li>
-              <NavLink to="/category-list" >View Categories</NavLink>
-            </li> */}
-          </ul>
-        </li>
+        </li> */}
         <li>
           <div
             className="menu-item"
@@ -128,6 +125,30 @@ function Sidebar() {
           <ul className={`submenu ${openMenu === "offers" ? "show" : ""}`}>
             <li>
               <NavLink to="/offers" className={({ isActive }) => (isActive ? "active" : "")}>Add Offers</NavLink>
+            </li>
+
+            {/* <li>
+              <NavLink to="/category-list" >View Categories</NavLink>
+            </li> */}
+          </ul>
+        </li>
+
+         <li>
+          <div
+            className="menu-item"
+            onClick={() => toggleMenu("login")}
+          >
+            <BiSolidOffer />
+            <span>Login</span>
+
+            <FaChevronDown
+              className={`arrow ${openMenu === "login" ? "open" : ""}`}
+            />
+          </div>
+
+          <ul className={`submenu ${openMenu === "login" ? "show" : ""}`}>
+            <li>
+              <NavLink to="/login" className={({ isActive }) => (isActive ? "active" : "")}>Login</NavLink>
             </li>
 
             {/* <li>
