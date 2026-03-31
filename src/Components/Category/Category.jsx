@@ -410,7 +410,7 @@ const Category = () => {
 
                                 {/* Image */}
                                 <td>
-                                    <img src={`http://localhost:5000/uploads/${cat.image}`} alt="" />
+                                    <img src={cat.image} alt={cat.name} />
                                 </td>
 
                                 {/* Name with hierarchy */}

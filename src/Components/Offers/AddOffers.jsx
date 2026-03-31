@@ -1,26 +1,28 @@
 import React, { useRef, useState } from "react";
 import { FiUpload } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
-import './AddOffers.css'
+import axios from "axios";
+import './AddOffers.css';
+import { toast } from "react-toastify";
+
 function AddOffers() {
+
     const [title, setTitle] = useState("");
+    const [slug, setSlug] = useState("");
     const [offerImage, setOfferImage] = useState(null);
+    const [bannerImage, setBannerImage] = useState(null);
 
     const imageInputRef = useRef();
-    const [bannerImage, setBannerImage] = useState(null);
     const bannerInputRef = useRef();
 
-    const handleBannerChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            setBannerImage({
-                file,
-                preview: URL.createObjectURL(file),
-            });
-        }
+    // 🔥 Auto slug generate
+    const handleTitleChange = (e) => {
+        const value = e.target.value;
+        setTitle(value);
+        setSlug(value.toLowerCase().replace(/\s+/g, "-"));
     };
 
-    // Handle Image Upload
+    // Offer image
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -31,33 +33,59 @@ function AddOffers() {
         }
     };
 
-    // Remove Image
-    const handleRemoveImage = () => {
+    // Banner image
+    const handleBannerChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setBannerImage({
+                file,
+                preview: URL.createObjectURL(file),
+            });
+        }
+    };
+
+    // Remove images
+    const removeOfferImage = () => {
         setOfferImage(null);
         imageInputRef.current.value = "";
     };
 
-    // Handle Submit
+    const removeBannerImage = () => {
+        setBannerImage(null);
+        bannerInputRef.current.value = "";
+    };
+
+    // Submit
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         const formData = new FormData();
         formData.append("title", title);
+        formData.append("slug", slug);
 
         if (offerImage) formData.append("image", offerImage.file);
         if (bannerImage) formData.append("banner", bannerImage.file);
 
         try {
-            await axios.post("https://shyambackend.onrender.com/api/offers/add-offer", formData);
+            await axios.post(
+                "http://localhost:5000/api/offers/add-offer",
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                }
+            );
 
-            ("Offer Added ✅");
+            toast.success("Offer Added ✅");
 
             setTitle("");
+            setSlug("");
             setOfferImage(null);
             setBannerImage(null);
 
         } catch (err) {
-            console.log(err);
+            console.log("ERROR:", err.response?.data || err.message);
         }
     };
 
@@ -66,75 +94,89 @@ function AddOffers() {
             <h2>Add Offer</h2>
 
             <form onSubmit={handleSubmit}>
+
                 {/* Title */}
                 <div className="form-group full">
-                    <label>Offer Title</label>
+                    <label>Title</label>
                     <input
                         type="text"
-                        placeholder="Enter offer title"
                         value={title}
-                        onChange={(e) => setTitle(e.target.value)}
+                        onChange={handleTitleChange}
+                        placeholder="Enter title"
                         required
                     />
                 </div>
 
-                {/* Image Upload */}
+                {/* Slug */}
                 <div className="form-group full">
-                    <label>
-                        Offer Image <small>(Recommended Size: 200px X 300px)</small>
-                    </label>
-
-                    <div style={{ display: "flex", gap: "40px", flexWrap: "wrap" }}>
-
-                        {/* Preview */}
-                        {offerImage && (
-                            <div className="image-upload-wrapper">
-                                <div className="image-upload-box">
-                                    <img src={offerImage.preview} alt="preview" />
-
-                                    <div className="image-overlay">
-                                        <div
-                                            className="delete-icon"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleRemoveImage();
-                                            }}
-                                        >
-                                            <MdDelete />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Upload Box */}
-                        {!offerImage && (
-                            <div
-                                className="image-upload-box"
-                                onClick={() => imageInputRef.current.click()}
-                            >
-                                <div className="upload-placeholder">
-                                    <span><FiUpload /></span>
-                                    <p>Upload</p>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Hidden Input */}
-                        <input
-                            type="file"
-                            hidden
-                            ref={imageInputRef}
-                            accept="image/*"
-                            onChange={handleImageChange}
-                        />
-                    </div>
+                    <label>Slug</label>
+                    <input
+                        type="text"
+                        value={slug}
+                        onChange={(e) => setSlug(e.target.value)}
+                        placeholder="auto-generated"
+                        required
+                    />
                 </div>
 
-                {/* Submit */}
+                {/* Offer Image */}
+                <div className="form-group full">
+                    <label>Offer Image</label>
+
+                    {offerImage ? (
+                        <div className="image-upload-box">
+                            <img src={offerImage.preview} alt="" />
+                            <MdDelete onClick={removeOfferImage} />
+                        </div>
+                    ) : (
+                        <div
+                            className="image-upload-box"
+                            onClick={() => imageInputRef.current.click()}
+                        >
+                            <FiUpload />
+                            <p>Upload Offer</p>
+                        </div>
+                    )}
+
+                    <input
+                        type="file"
+                        hidden
+                        ref={imageInputRef}
+                        onChange={handleImageChange}
+                    />
+                </div>
+
+                {/* Banner Image */}
+                <div className="form-group full">
+                    <label>Banner Image</label>
+
+                    {bannerImage ? (
+                        <div className="image-upload-box">
+                            <img src={bannerImage.preview} alt="" />
+                            <MdDelete onClick={removeBannerImage} />
+                        </div>
+                    ) : (
+                        <div
+                            className="image-upload-box"
+                            onClick={() => bannerInputRef.current.click()}
+                        >
+                            <FiUpload />
+                            <p>Upload Banner</p>
+                        </div>
+                    )}
+
+                    <input
+                        type="file"
+                        hidden
+                        ref={bannerInputRef}
+                        onChange={handleBannerChange}
+                    />
+                </div>
+
                 <button type="submit" className="submit-btn">
                     Save Offer
                 </button>
+
             </form>
         </div>
     );
