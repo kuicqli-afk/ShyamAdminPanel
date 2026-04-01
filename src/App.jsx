@@ -12,6 +12,7 @@ import Category from "./Components/Category/Category";
 import BannerList from "./Components/Addbanner/BannerList";
 import AddOffers from "./Components/Offers/AddOffers";
 import LoginPage from "./Components/Login/LoginPage";
+import OfferList from "./Components/Offers/OfferList";
 // import CategoryList from "./Components/Category/CategoryList";
 
 function App() {
@@ -28,7 +29,8 @@ function App() {
 
           <Routes>
 
-            <Route path="/" element={<Dashboard />} />
+            <Route path="/" element={<LoginPage />} />
+            <Route path="/dashboard" element={<Dashboard />} />
 
             <Route path="/products/add" element={<AddProduct />} />
 
@@ -37,7 +39,8 @@ function App() {
             <Route path="/banner-list" element={<BannerList />} />
             <Route path="/category" element={<Category />} />
             <Route path="/offers" element={<AddOffers />} />
-            <Route path="/login" element={<LoginPage />} />
+            <Route path="/offer-list" element={<OfferList />} />
+
 
           </Routes>
 

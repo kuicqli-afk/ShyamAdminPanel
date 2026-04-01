@@ -32,9 +32,6 @@ const Category = () => {
     const [subName, setSubName] = useState("");
     const [parentCategory, setParentCategory] = useState("");
 
-    // pagination
-    const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage] = useState(4); // change as needed
 
 
     // === editing cate ===
@@ -75,9 +72,9 @@ const Category = () => {
         fetchCategories();
     }, []);
 
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [search, statusFilter]);
+    // useEffect(() => {
+    //     setCurrentPage(1);
+    // }, [search, statusFilter]);
 
     // ================= HANDLERS =================
     const handleChange = (e) => {
@@ -371,15 +368,6 @@ const Category = () => {
     // 1. Build tree first
     const categoryTree = buildTree(categories);
 
-    // 2. Pagination indexes
-    const indexOfLast = currentPage * itemsPerPage;
-    const indexOfFirst = indexOfLast - itemsPerPage;
-
-    // 3. Paginated data
-    const paginatedTree = categoryTree.slice(indexOfFirst, indexOfLast);
-
-    // 4. Total pages
-    const totalPages = Math.ceil(categoryTree.length / itemsPerPage);
 
     const renderTree = (nodes, level = 0) => {
         return nodes.map((cat, index) => {
@@ -640,31 +628,12 @@ const Category = () => {
                                 </thead>
 
                                 <tbody>
-                                    {/* {renderTree(categoryTree)} */}
-                                    {renderTree(paginatedTree)}
+                                   {renderTree(categoryTree)}
                                 </tbody>
                             </table>
                         )}
                     </Droppable>
                 </DragDropContext>
-                <div className="pagination">
-                    <button
-                        onClick={() => setCurrentPage((prev) => prev - 1)}
-                        disabled={currentPage === 1}
-                    >
-                        Prev
-                    </button>
-
-                    <span>Page {currentPage} of {totalPages}</span>
-
-                    <button
-                        onClick={() => setCurrentPage((prev) => prev + 1)}
-                        disabled={currentPage === totalPages}
-                    >
-                        Next
-                    </button>
-                </div>
-
                 {/* BOTTOM BULK */}
                 <div className="table-footer">
                     <select>

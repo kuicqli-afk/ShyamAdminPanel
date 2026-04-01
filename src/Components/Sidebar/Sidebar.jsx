@@ -130,9 +130,9 @@ function Sidebar() {
               <NavLink to="/offers" className={({ isActive }) => (isActive ? "active" : "")}>Add Offers</NavLink>
             </li>
 
-            {/* <li>
-              <NavLink to="/category-list" >View Categories</NavLink>
-            </li> */}
+            <li>
+              <NavLink to="/offer-list" >View Offer List</NavLink>
+            </li>
           </ul>
         </li>
 

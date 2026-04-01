@@ -23,6 +23,7 @@ function AddProduct() {
     off: "",
     slots: "",
     isOpen: true,
+    tag: "",
     image: null,
     images: []
   };
@@ -99,6 +100,15 @@ function AddProduct() {
       images: [...prev.images, ...files]
     }));
   };
+
+  //offers 
+  const [offers, setOffers] = useState([]);
+  axios.get("https://shyambackend.onrender.com/api/offers")
+    .then((res) => {
+      setOffers(res.data.offers);
+    })
+    .catch((err) => console.log(err));
+
 
   const handleRemoveGalleryImage = (index) => {
     const updated = [...galleryImages];
@@ -195,6 +205,24 @@ function AddProduct() {
             {errors.category && <p className="error">{errors.category}</p>}
 
           </div>
+          <div className="form-group">
+            <label>Select Offers</label>
+            <select
+              name="tag"
+              value={product.tag || ""}
+              onChange={handleChange}
+            >
+              <option value="">Select Offer</option>
+
+              {offers.map((offer) => (
+                <option key={offer._id} value={offer.slug}>
+                  {offer.title}
+                </option>
+              ))}
+            </select>
+
+          </div>
+
           <div className="form-group">
 
             <label>Banner</label>
