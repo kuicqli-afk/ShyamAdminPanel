@@ -67,7 +67,7 @@ function AddProduct() {
       return updated;
     });
   };
-  
+
   const mainImageRef = useRef();
   const galleryInputRef = useRef();
   const [errors, setErrors] = useState({});
@@ -218,12 +218,16 @@ function AddProduct() {
             </select>
 
           </div>
+
+
+
+
           <div className="form-group">
             <label>Product Name</label>
             <input type="text" name="title" value={product.title} onChange={handleChange} />
             {errors.title && <p className="error">{errors.title}</p>}
           </div>
-    
+
           <div className="form-group">
             <label>Quantity</label>
             <input type="text" name="portion" value={product.portion} onChange={handleChange} />
@@ -237,7 +241,7 @@ function AddProduct() {
             </select>
           </div>
 
-          
+
 
           <div className="form-group">
             <label>Price</label>

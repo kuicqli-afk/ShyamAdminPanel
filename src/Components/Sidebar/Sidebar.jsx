@@ -9,7 +9,7 @@ import {
 } from "react-icons/ai";
 
 import { FaChevronDown, FaSlidersH } from "react-icons/fa";
-import { BiCategory, BiCategoryAlt, BiSolidOffer } from "react-icons/bi";
+import { BiCategory, BiCategoryAlt, BiLogIn, BiSolidOffer } from "react-icons/bi";
 import { FaProductHunt } from "react-icons/fa6";
 import { MdCategory } from "react-icons/md";
 
@@ -54,13 +54,16 @@ function Sidebar() {
           </div>
 
           <ul className={`submenu ${openMenu === "products" ? "show" : ""}`}>
-            <li>
-              <NavLink to="/products/add">Add Products</NavLink>
-            </li>
 
             <li>
               <NavLink to="/products/list">Products List</NavLink>
             </li>
+
+            <li>
+              <NavLink to="/products/add">Add Products</NavLink>
+            </li>
+
+
 
             <li>
               <NavLink to="/category" className={({ isActive }) => (isActive ? "active" : "")}>Add Category</NavLink>
@@ -133,12 +136,12 @@ function Sidebar() {
           </ul>
         </li>
 
-         <li>
+        <li>
           <div
             className="menu-item"
             onClick={() => toggleMenu("login")}
           >
-            <BiSolidOffer />
+            <BiLogIn />
             <span>Login</span>
 
             <FaChevronDown
@@ -152,7 +155,7 @@ function Sidebar() {
             </li>
 
             {/* <li>
-              <NavLink to="/category-list" >View Categories</NavLink>
+              <NavLink to="/logout" >Logout</NavLink>
             </li> */}
           </ul>
         </li>
