@@ -32,7 +32,7 @@ function Sidebar() {
         {/* Dashboard */}
         <li>
           <NavLink
-            to="/"
+            to="/dashboard"
             className={({ isActive }) => (isActive ? "active" : "")}
           >
             <AiOutlineDashboard /> Dashboard
@@ -151,7 +151,7 @@ function Sidebar() {
 
           <ul className={`submenu ${openMenu === "login" ? "show" : ""}`}>
             <li>
-              <NavLink to="/login" className={({ isActive }) => (isActive ? "active" : "")}>Login</NavLink>
+              <NavLink to="/" className={({ isActive }) => (isActive ? "active" : "")}>Login</NavLink>
             </li>
 
             {/* <li>
