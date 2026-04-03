@@ -68,7 +68,7 @@ function AddOffers() {
 
         try {
             await axios.post(
-                "http://localhost:5000/api/offers/add-offer",
+                "https://shyambackend.onrender.com/api/offers/add-offer",
                 formData,
                 {
                     headers: {

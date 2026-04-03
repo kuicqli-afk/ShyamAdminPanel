@@ -1,105 +1,168 @@
-/* General container */
-.login-container {
-  min-height: 100vh;
+/* MAIN CONTAINER */
+.login-page {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+ 
+}
+
+/* LEFT SECTION */
+.left-section {
+  text-align: center;
+  
+}
+
+.left-section img {
+  width: 500px;
+  max-width: 100%;
+  transition: transform 0.3s ease;
+}
+
+
+
+.left-section h1 {
+  margin-top: 15px;
+  font-size: 36px;
+  font-weight: 600;
+  color: #2d353c;
+}
+
+/* RIGHT SECTION */
+.right-section {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* background: linear-gradient(135deg, #667eea, #764ba2); */
-  font-family: 'Arial', sans-serif;
-}
-
-/* Card */
-.login-card {
-  background: #fff;
-  padding: 40px 30px;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-  width: 550px;
-  max-width: 90%;
-  text-align: center;
-}
  
-
-
-.login-card h2 {
-  margin-bottom: 25px;
-  color: #333;
 }
 
-/* Form groups */
-.form-group {
-  margin-bottom: 20px;
-  text-align: left;
+/* LOGIN BOX */
+.login-box {
+  width: 650px;
+  max-width: 100%;
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  border: 1px solid #e0e4e8;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
 }
 
-.form-group label {
-  display: block;
-  margin-bottom: 6px;
-  color: #555;
+.login-box:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* HEADING */
+.login-box h2 {
+  margin-bottom: 10px;
+  font-size: 24px;
+  color: #2d353c;
+  font-weight: 700;
+}
+
+.sub-text {
   font-size: 14px;
+  color: #7c8d94;
+  margin-bottom: 20px;
+  font-weight: 400;
 }
 
-.form-group input {
+/* INPUT FIELD */
+.login-box input {
   width: 100%;
   padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 14px;
-  outline: none;
-  transition: border 0.2s;
-}
-
-.form-group input:focus {
-  border-color: #667eea;
-}
-
-/* Form options */
-.form-options {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  font-size: 13px;
-}
-
-.form-options a {
-  color: #667eea;
-  text-decoration: none;
-}
-
-.form-options a:hover {
-  text-decoration: underline;
-}
-
-/* Button */
-.login-btn {
-  width: 100%;
-  padding: 12px;
-  background: #667eea;
-  border: none;
-  color: #fff;
+  margin: 12px 0;
+  border: 1px solid #d1d7dc;
   border-radius: 8px;
   font-size: 16px;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-box input:focus {
+  border-color: #2271b1;
+  outline: none;
+  box-shadow: 0 0 0 1px #2271b1;
+}
+
+/* BUTTON (PRIMARY) */
+.login-box button {
+  width: 100%;
+  padding: 12px;
+  background: #2271b1;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
-.login-btn:hover {
-  background: #5a67d8;
-}
-
-/* Signup link */
-.signup-link {
-  margin-top: 20px;
+/* GOOGLE SIGN-IN BUTTON */
+.google-btn {
+  margin-top: 15px;
+  background: #fff;
+  color: #1d2327;
+  border: 1px solid #d1d7dc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 8px;
   font-size: 14px;
-  color: #555;
+  cursor: pointer;
+  transition: background 0.3s ease, box-shadow 0.2s ease;
 }
 
-.signup-link a {
-  color: #667eea;
-  text-decoration: none;
+.google-btn img {
+  width: 20px;
 }
 
-.signup-link a:hover {
+
+/* DIVIDER */
+.divider {
+  text-align: center;
+  margin: 20px 0;
+  font-size: 16px;
+
+}
+
+/* FOOTER */
+.footer-text {
+  text-align: center;
+  font-size: 14px;
+  color: #7c8d94;
+  margin-top: 20px;
+}
+
+.footer-text span {
+  color: #2271b1;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.footer-text span:hover {
   text-decoration: underline;
 }
+
+/* RESPONSIVE STYLES */
+@media (max-width: 768px) {
+  .login-page {
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .left-section {
+    display: none;
+  }
+
+  .login-box {
+    width: 100%;
+    max-width: 350px;
+    padding: 25px;
+  }
+}
+

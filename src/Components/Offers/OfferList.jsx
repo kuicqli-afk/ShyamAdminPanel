@@ -15,7 +15,7 @@ const OfferList = () => {
     // ================= FETCH =================
     const fetchOffers = async () => {
         try {
-            const res = await axios.get("http://localhost:5000/api/offers");
+            const res = await axios.get("https://shyambackend.onrender.com/api/offers");
             setOffers(res.data.offers);
         } catch (err) {
             console.log(err);
@@ -42,7 +42,7 @@ const OfferList = () => {
         setOffers(items);
 
         try {
-            await axios.put("http://localhost:5000/api/offers/update-order", {
+            await axios.put("https://shyambackend.onrender.com/api/offers/update-order", {
                 offers: items.map((o, index) => ({
                     id: o._id,
                     order: index,
@@ -74,7 +74,7 @@ const OfferList = () => {
     // ✅ SOFT DELETE (trash flag)
     const handleDelete = async (id) => {
         try {
-            await axios.put(`http://localhost:5000/api/offers/delete/${id}`);
+            await axios.put(`https://shyambackend.onrender.com/api/offers/delete/${id}`);
             toast.success("Moved to Trash 🗑️");
             fetchOffers();
         } catch {
@@ -85,7 +85,7 @@ const OfferList = () => {
     // ✅ HIDE / UNHIDE
     const handleHide = async (id) => {
         try {
-            await axios.put(`http://localhost:5000/api/offers/toggle-hide/${id}`);
+            await axios.put(`https://shyambackend.onrender.com/api/offers/toggle-hide/${id}`);
             fetchOffers();
         } catch {
             toast.error("Error");
@@ -103,7 +103,7 @@ const OfferList = () => {
             if (bulkAction === "delete") {
                 await Promise.all(
                     selected.map((id) =>
-                        axios.put(`http://localhost:5000/api/offers/delete/${id}`)
+                        axios.put(`https://shyambackend.onrender.com/api/offers/delete/${id}`)
                     )
                 );
             }
@@ -111,7 +111,7 @@ const OfferList = () => {
             if (bulkAction === "hide") {
                 await Promise.all(
                     selected.map((id) =>
-                        axios.put(`http://localhost:5000/api/offers/toggle-hide/${id}`)
+                        axios.put(`https://shyambackend.onrender.com/api/offers/toggle-hide/${id}`)
                     )
                 );
             }

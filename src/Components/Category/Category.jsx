@@ -400,7 +400,6 @@ const Category = () => {
                                 <td>
                                     <img src={cat.image} alt={cat.name} />
                                 </td>
-
                                 {/* Name with hierarchy */}
                                 <td
                                     className="name-link"

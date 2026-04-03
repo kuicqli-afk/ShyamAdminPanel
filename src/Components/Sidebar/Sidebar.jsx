@@ -4,23 +4,29 @@ import "./Sidebar.css";
 
 import {
   AiOutlineDashboard,
-  AiOutlineAppstore,
   AiOutlineShoppingCart
 } from "react-icons/ai";
 
 import { FaChevronDown, FaSlidersH } from "react-icons/fa";
-import { BiCategory, BiCategoryAlt, BiLogIn, BiSolidOffer } from "react-icons/bi";
+import { BiSolidOffer } from "react-icons/bi";
 import { FaProductHunt } from "react-icons/fa6";
-import { MdCategory } from "react-icons/md";
+import { LuLogOut } from "react-icons/lu";
+
 
 
 
 function Sidebar() {
 
   const [openMenu, setOpenMenu] = useState(null);
-
+ 
   const toggleMenu = (menu) => {
     setOpenMenu(openMenu === menu ? null : menu);
+  };
+
+
+  const handleLogout = () => {
+    localStorage.removeItem("isLoggedIn");
+    window.location.href = "/";
   };
 
   return (
@@ -91,27 +97,10 @@ function Sidebar() {
               <NavLink to="/add-banner">Add Banner</NavLink>
             </li>
             <li>
-              <NavLink to="banner-list">Banner List</NavLink>
+              <NavLink to="/banner-list">Banner List</NavLink>
             </li>
           </ul>
         </li>
-
-        {/* Categories */}
-        {/* <li>
-          <div
-            className="menu-item"
-            onClick={() => toggleMenu("category")}
-          >
-            <BiCategoryAlt />
-            <span>Categories</span>
-
-            <FaChevronDown
-              className={`arrow ${openMenu === "category" ? "open" : ""}`}
-            />
-          </div>
-
-
-        </li> */}
         <li>
           <div
             className="menu-item"
@@ -135,36 +124,15 @@ function Sidebar() {
             </li>
           </ul>
         </li>
-
-        <li>
-          <div
-            className="menu-item"
-            onClick={() => toggleMenu("login")}
-          >
-            <BiLogIn />
-            <span>Login</span>
-
-            <FaChevronDown
-              className={`arrow ${openMenu === "login" ? "open" : ""}`}
-            />
-          </div>
-
-          <ul className={`submenu ${openMenu === "login" ? "show" : ""}`}>
-            <li>
-              <NavLink to="/" className={({ isActive }) => (isActive ? "active" : "")}>Login</NavLink>
-            </li>
-
-            {/* <li>
-              <NavLink to="/logout" >Logout</NavLink>
-            </li> */}
-          </ul>
-        </li>
-
         {/* Orders */}
         <li>
           <NavLink to="/orders">
             <AiOutlineShoppingCart /> Orders
           </NavLink>
+        </li>
+
+        <li onClick={handleLogout}>
+          <NavLink to="/" className={({ isActive }) => (isActive ? "active" : "")}> <LuLogOut />Logout</NavLink>
         </li>
 
       </ul>

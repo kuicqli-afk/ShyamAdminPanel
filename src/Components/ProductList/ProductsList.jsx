@@ -16,7 +16,7 @@ function ProductList() {
   // ================= FETCH =================
   const fetchProducts = async () => {
     try {
-      const res = await axios.get("https://shyambackend.onrender.com/api/products");
+      const res = await axios.get("https://shyambackend.onrender.com/api/products?admin=true");
       setProducts(res.data.products);
     } catch (err) {
       console.log(err);
@@ -28,9 +28,17 @@ function ProductList() {
   }, []);
 
   // ================= FILTER =================
-  const filtered = products.filter((p) =>
-    p.title.toLowerCase().includes(search.toLowerCase())
-  );
+  // const filtered = products.filter((p) =>
+  //   p.title.toLowerCase().includes(search.toLowerCase())
+  // );
+
+  // const filtered = products.filter((p) =>
+  //   p.title?.toLowerCase().includes(search.toLowerCase())
+  // );
+
+  const filtered = products
+  .filter((p) => p.title?.toLowerCase().includes(search.toLowerCase()))
+  .filter((p) => p.category !== null); // 🔥 ADD THIS
 
   // ================= DRAG =================
   const handleDragEnd = async (result) => {
