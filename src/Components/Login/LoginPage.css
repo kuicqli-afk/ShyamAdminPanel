@@ -5,13 +5,13 @@
   align-items: center;
   height: 100vh;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
- 
+
 }
 
 /* LEFT SECTION */
 .left-section {
   text-align: center;
-  
+
 }
 
 .left-section img {
@@ -34,7 +34,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
- 
+
 }
 
 /* LOGIN BOX */
@@ -147,6 +147,26 @@
   text-decoration: underline;
 }
 
+.switch-text {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.switch-text span {
+  color: #ff4d4d;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.error-message {
+  color: #e53935;
+ margin-top: -4px;
+ margin-bottom: 8px;
+  border-radius: 6px;
+  font-size: 14px;
+  text-align: left;
+}
+
 /* RESPONSIVE STYLES */
 @media (max-width: 768px) {
   .login-page {
@@ -165,4 +185,3 @@
     padding: 25px;
   }
 }
-

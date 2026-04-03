@@ -6,6 +6,10 @@ import axios from "axios";
 
 
 function LoginPage({ setIsLogin }) {
+
+  const [mode, setMode] = useState("login"); // "login" or "signup"
+  const [name, setName] = useState("");
+  const [isNewUser, setIsNewUser] = useState(false);
   const [input, setInput] = useState("");  // Input for email or mobile number
   const [error, setError] = useState("");  // Error message
   const [otp, setOtp] = useState("");  // OTP input
@@ -22,9 +26,13 @@ function LoginPage({ setIsLogin }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // ✅ VALIDATION ADD
-    if (!validateInput(input)) {
-      setError("Enter valid phone number");
+    if (!input) {
+      setError("Enter phone number");
+      return;
+    }
+
+    if (mode === "signup" && !name) {
+      setError("Enter name");
       return;
     }
 
@@ -35,18 +43,28 @@ function LoginPage({ setIsLogin }) {
       );
 
       if (res.data.success) {
-        // ✅ DIRECT OTP SCREEN
+
+
+        if (mode === "login" && res.data.isNewUser) {
+          setError("User not found. Please sign up.");
+          return;
+        }
+
+
+        if (mode === "signup" && !res.data.isNewUser) {
+          setError("User already exists. Please login.");
+          return;
+        }
+
         setStep(2);
       } else {
         setError(res.data.message);
       }
 
     } catch (err) {
-      console.log(err);
       setError("Server error");
     }
   };
-
   // Handle OTP verification
   const handleOtpSubmit = async (e) => {
     e.preventDefault();
@@ -61,7 +79,8 @@ function LoginPage({ setIsLogin }) {
         "https://shyambackend.onrender.com/api/auth/verify-otp",
         {
           phone: input,
-          otp
+          otp,
+          name // 🔥 IMPORTANT
         }
       );
 
@@ -72,14 +91,13 @@ function LoginPage({ setIsLogin }) {
         setIsLogin(true);
         navigate("/dashboard");
       } else {
-        setError(res.data.message || "Invalid OTP");
+        setError(res.data.message);
       }
 
     } catch (err) {
-      setError("Error verifying OTP");
+      setError("OTP verification failed");
     }
   };
-
   return (
     <div className="login-page">
       {/* LEFT */}
@@ -91,15 +109,26 @@ function LoginPage({ setIsLogin }) {
       {/* RIGHT */}
       <div className="right-section">
         <div className="login-box">
-          <h2>Sign In</h2>
+          <h2>{mode === "signup" ? "Sign Up" : "Login"}</h2>
           <p className="sub-text">to access your account</p>
 
           {/* Step 1: Email/Phone Input */}
           {step === 1 && (
             <form onSubmit={handleSubmit}>
+
+              {/* 🔥 SHOW NAME ONLY IN SIGNUP */}
+              {mode === "signup" && (
+                <input
+                  type="text"
+                  placeholder="Enter Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              )}
+
               <input
                 type="text"
-                placeholder="Email address or mobile number"
+                placeholder="Enter Phone Number"
                 value={input}
                 onChange={(e) => {
                   setInput(e.target.value);
@@ -107,16 +136,51 @@ function LoginPage({ setIsLogin }) {
                 }}
               />
 
-              {/* Error message display */}
               {error && <p className="error-message">{error}</p>}
 
-              <button type="submit">Continue</button>
+              <button type="submit">
+                {mode === "signup" ? "Sign Up" : "Login"}
+              </button>
             </form>
           )}
 
-          {/* Step 2: OTP Input */}
+          <p className="switch-text">
+            {mode === "login" ? (
+              <>
+                Don't have an account?{" "}
+                <span onClick={() => {
+                  setMode("signup");
+                  setError("");
+                }}>
+                  Sign Up
+                </span>
+              </>
+            ) : (
+              <>
+                Already have an account?{" "}
+                <span onClick={() => {
+                  setMode("login");
+                  setError("");
+                }}>
+                  Login
+                </span>
+              </>
+            )}
+          </p>
+
           {step === 2 && (
             <form onSubmit={handleOtpSubmit}>
+
+
+              {isNewUser && (
+                <input
+                  type="text"
+                  placeholder="Enter Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              )}
+
               <input
                 type="text"
                 placeholder="Enter OTP"
@@ -126,13 +190,12 @@ function LoginPage({ setIsLogin }) {
                   setError("");
                 }}
               />
-              {/* Error message display */}
+
               {error && <p className="error-message">{error}</p>}
 
               <button type="submit">Verify OTP</button>
             </form>
           )}
-
           <div className="divider">or</div>
 
           {/* Google Sign-In Button */}
