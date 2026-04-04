@@ -18,7 +18,7 @@ import { LuLogOut } from "react-icons/lu";
 function Sidebar() {
 
   const [openMenu, setOpenMenu] = useState(null);
- 
+
   const toggleMenu = (menu) => {
     setOpenMenu(openMenu === menu ? null : menu);
   };
@@ -101,6 +101,29 @@ function Sidebar() {
             </li>
           </ul>
         </li>
+        <li>
+          <div
+            className="menu-item"
+            onClick={() => toggleMenu("ads")}
+          >
+            <FaSlidersH />
+            <span>Ads Slider</span>
+
+            <FaChevronDown
+              className={`arrow ${openMenu === "ads" ? "open" : ""}`}
+            />
+          </div>
+
+          <ul className={`submenu ${openMenu === "ads" ? "show" : ""}`}>
+            <li>
+              <NavLink to="/ads-slider">Ads Slider</NavLink>
+            </li>
+            <li>
+              <NavLink to="/ads-list">Ads Slider List</NavLink>
+            </li>
+          </ul>
+        </li>
+
         <li>
           <div
             className="menu-item"

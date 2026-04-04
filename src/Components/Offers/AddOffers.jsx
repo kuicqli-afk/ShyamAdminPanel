@@ -120,57 +120,79 @@ function AddOffers() {
                 </div>
 
                 {/* Offer Image */}
-                <div className="form-group full">
+                {/* ================= OFFER IMAGE ================= */}
+                <div className="form-group">
                     <label>Offer Image</label>
 
-                    {offerImage ? (
-                        <div className="image-upload-box">
-                            <img src={offerImage.preview} alt="" />
-                            <MdDelete onClick={removeOfferImage} />
-                        </div>
-                    ) : (
-                        <div
-                            className="image-upload-box"
-                            onClick={() => imageInputRef.current.click()}
-                        >
-                            <FiUpload />
-                            <p>Upload Offer</p>
-                        </div>
-                    )}
+                    <div className="image-upload-wrapper">
+                        {offerImage ? (
+                            <div className="image-upload-box">
+                                <img src={offerImage.preview} alt="offer" />
 
-                    <input
-                        type="file"
-                        hidden
-                        ref={imageInputRef}
-                        onChange={handleImageChange}
-                    />
+                                <div className="image-overlay">
+                                    <div className="delete-icon" onClick={removeOfferImage}>
+                                        <MdDelete />
+                                    </div>
+                                </div>
+                            </div>
+                        ) : (
+                            <div
+                                className="image-upload-box"
+                                onClick={() => imageInputRef.current.click()}
+                            >
+                                <div className="upload-placeholder">
+                                    <span><FiUpload /></span>
+                                    <p>Upload</p>
+                                </div>
+                            </div>
+                        )}
+
+                        <input
+                            type="file"
+                            hidden
+                            accept="image/*"
+                            ref={imageInputRef}
+                            onChange={handleImageChange}
+                        />
+                    </div>
                 </div>
 
-                {/* Banner Image */}
-                <div className="form-group full">
+
+                {/* ================= BANNER IMAGE ================= */}
+                <div className="form-group">
                     <label>Banner Image</label>
 
-                    {bannerImage ? (
-                        <div className="image-upload-box">
-                            <img src={bannerImage.preview} alt="" />
-                            <MdDelete onClick={removeBannerImage} />
-                        </div>
-                    ) : (
-                        <div
-                            className="image-upload-box"
-                            onClick={() => bannerInputRef.current.click()}
-                        >
-                            <FiUpload />
-                            <p>Upload Banner</p>
-                        </div>
-                    )}
+                    <div className="image-upload-wrapper">
+                        {bannerImage ? (
+                            <div className="image-upload-box">
+                                <img src={bannerImage.preview} alt="banner" />
 
-                    <input
-                        type="file"
-                        hidden
-                        ref={bannerInputRef}
-                        onChange={handleBannerChange}
-                    />
+                                <div className="image-overlay">
+                                    <div className="delete-icon" onClick={removeBannerImage}>
+                                        <MdDelete />
+                                    </div>
+                                </div>
+                            </div>
+                        ) : (
+                            <div
+                                className="image-upload-box"
+                                onClick={() => bannerInputRef.current.click()}
+                            >
+                                <div className="upload-placeholder">
+                                    <span><FiUpload /></span>
+                                    <p>Upload</p>
+                                </div>
+                            </div>
+                        )}
+
+                        <input
+                            type="file"
+                            hidden
+                            accept="image/*"
+                            ref={bannerInputRef}
+                            onChange={handleBannerChange}
+                        />
+                    </div>
                 </div>
 
                 <button type="submit" className="submit-btn">

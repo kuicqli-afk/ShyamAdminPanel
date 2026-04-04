@@ -16,8 +16,10 @@
   background: #fff;
   border: 1px solid #dcdcde;
   border-radius: 4px;
-  margin-top: 45px;
+  /* margin-top: 45px; */
 }
+
+
 .product-form{
   box-shadow: none;
   padding: 0px;

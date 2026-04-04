@@ -1,115 +1,233 @@
-/* Apply box-sizing fix */
-
+/* ================= RESET ================= */
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-/* Container */
+/* ================= ROOT THEME ================= */
+:root {
+  --primary: #4f46e5;
+  --bg: #f1f5f9;
+  --card: #ffffff;
+  --text: #1e293b;
+  --subtext: #64748b;
+  --border: #e2e8f0;
+  --danger: #ef4444;
+}
 
+/* ================= CONTAINER ================= */
 .add-product-container {
-  /* padding: 30px; */
-  background: #f4f6f9;
+  /* padding: 25px; */
+  background: var(--bg);
   min-height: 100vh;
+  font-family: 'Inter', sans-serif;
 }
 
-.add-product-container h2 {
-  margin-bottom: 20px;
-}
-
-
-/* Form */
-
-.product-form {
-  background: #fff;
+/* ================= FORM CARD ================= */
+.products-form {
+  background: var(--card);
   padding: 25px;
   width: 100%;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
 }
 
+/* ================= HEADING ================= */
+.products-form h2 {
+  margin-bottom: 20px;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text);
+}
 
-/* Grid Layout */
-
+/* ================= GRID ================= */
 .form-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 18px;
-  width: 100%;
 }
-/* .product-form .form-group {
-    margin-bottom: 0px;
-    display: flex;
-    flex-direction: column;
-} */
 
-/* Form Group */
-
+/* ================= FORM GROUP ================= */
 .form-group {
   display: flex;
   flex-direction: column;
-  width: 100%;
 }
 
 .form-group label {
   margin-bottom: 6px;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 13px;
+  color: var(--subtext);
 }
 
-
-/* Inputs */
-
+/* ================= INPUTS ================= */
 .form-group input,
 .form-group select,
 .form-group textarea {
   width: 100%;
   padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
   font-size: 14px;
+  transition: 0.25s;
+  outline: none;
+  background: #fff;
 }
 
+/* Focus */
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 6px rgba(79,70,229,0.25);
+}
 
 /* Textarea */
-
 textarea {
   min-height: 90px;
   resize: none;
 }
 
-
-/* Full width field */
-
+/* Full width */
 .form-group.full {
   grid-column: span 3;
-  margin-top: 20px;
 }
 
-
-/* Button */
-
+/* ================= BUTTON ================= */
 .submit-btn {
   margin-top: 25px;
   padding: 12px;
-  background: #2271b1;
+  background: linear-gradient(135deg, #4f46e5, #4338ca);
   border: none;
   color: #fff;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 15px;
   width: 200px;
+  transition: 0.3s;
 }
 
 .submit-btn:hover {
-  background: #135e96;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(79,70,229,0.3);
 }
-element.style {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-}
+
+/* ================= ERROR ================= */
 .error {
-  color: red;
+  color: var(--danger);
   font-size: 12px;
   margin-top: 4px;
+}
+
+/* ================= IMAGE UPLOAD ================= */
+.image-upload-wrapper {
+  margin-top: 5px;
+}
+
+.image-upload-box {
+  width: 120px;
+  height: 120px;
+  border: 2px dashed #cbd5e1;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  background: #f8fafc;
+  transition: 0.3s;
+}
+
+.image-upload-box:hover {
+  border-color: var(--primary);
+}
+
+/* Upload Placeholder */
+.upload-placeholder {
+  text-align: center;
+  color: var(--subtext);
+}
+
+.upload-placeholder span {
+  font-size: 22px;
+}
+
+.upload-placeholder p {
+  font-size: 12px;
+}
+
+/* Image Preview */
+.image-upload-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Overlay */
+.image-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  padding: 5px;
+  opacity: 0;
+  transition: 0.3s;
+}
+
+.image-upload-box:hover .image-overlay {
+  opacity: 1;
+}
+
+/* Delete Icon */
+.delete-icon {
+  background: #fff;
+  border-radius: 50%;
+  padding: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--danger);
+}
+
+/* ================= GALLERY ================= */
+.form-group.full > div {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 1024px) {
+  .form-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .form-group.full {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 600px) {
+  .add-product-container {
+    padding: 15px;
+  }
+
+  .products-form {
+    padding: 18px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-group.full {
+    grid-column: span 1;
+  }
+
+  .submit-btn {
+    width: 100%;
+  }
 }

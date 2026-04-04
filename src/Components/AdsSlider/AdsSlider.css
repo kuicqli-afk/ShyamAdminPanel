@@ -1,0 +1,134 @@
+/* ================= WORDPRESS ROOT ================= */
+:root {
+  --wp-blue: #2271b1;
+  --wp-blue-dark: #135e96;
+  --wp-bg: #f0f2f5;
+  --wp-card: #ffffff;
+  --wp-text: #1d2327;
+  --wp-subtext: #646970;
+  --wp-border: #8c8f94;
+}
+
+/* ================= CONTAINER ================= */
+.ads-slider-container {
+  max-width: 520px;
+  padding: 25px;
+  background: var(--wp-card);
+  border-radius: 8px;
+  border: 1px solid #dcdcde;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* ================= TITLE ================= */
+.ads-slider-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--wp-text);
+  margin-bottom: 20px;
+}
+
+/* ================= FORM ================= */
+.ads-slider-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ================= LABEL ================= */
+.ads-slider-label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--wp-text);
+}
+
+/* ================= INPUT ================= */
+.ads-slider-input[type="text"],
+.ads-slider-input[type="file"] {
+  margin-top: 6px;
+  padding: 8px 10px;
+  font-size: 14px;
+  border: 1px solid var(--wp-border);
+  border-radius: 4px;
+  background: #fff;
+  transition: 0.2s;
+  outline: none;
+}
+
+/* Focus (WordPress Blue Highlight) */
+.ads-slider-input[type="text"]:focus,
+.ads-slider-input[type="file"]:focus {
+  border-color: var(--wp-blue);
+  box-shadow: 0 0 0 1px var(--wp-blue);
+}
+
+/* ================= BUTTON ================= */
+.ads-slider-button {
+  margin-top: 10px;
+  padding: 9px 16px;
+  background: var(--wp-blue);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid var(--wp-blue);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+/* Hover */
+.ads-slider-button:hover {
+  background: var(--wp-blue-dark);
+  border-color: var(--wp-blue-dark);
+}
+
+/* Disabled */
+.ads-slider-button:disabled {
+  background: #a7aaad;
+  border-color: #a7aaad;
+  cursor: not-allowed;
+}
+
+/* ================= IMAGE PREVIEW ================= */
+.preview-box {
+  width: 100%;
+  height: 160px;
+  border: 2px dashed #c3c4c7;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #f6f7f7;
+  margin-top: 6px;
+}
+
+/* Hover like WP uploader */
+.preview-box:hover {
+  border-color: var(--wp-blue);
+  background: #f0f6fc;
+}
+
+.preview-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 600px) {
+  .ads-slider-container {
+    margin: 15px;
+    padding: 18px;
+  }
+
+  .ads-slider-title {
+    font-size: 18px;
+  }
+
+  .ads-slider-button {
+    width: 100%;
+  }
+}

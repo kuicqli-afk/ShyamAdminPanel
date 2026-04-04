@@ -7,9 +7,10 @@ import axios from "axios";
 
 function LoginPage({ setIsLogin }) {
 
-  const [mode, setMode] = useState("login"); // "login" or "signup"
-  const [name, setName] = useState("");
-  const [isNewUser, setIsNewUser] = useState(false);
+  // const [mode, setMode] = useState("login"); // "login" or "signup"
+  // const [name, setName] = useState("");
+  const [sessionId, setSessionId] = useState("");
+  // const [isNewUser, setIsNewUser] = useState(false);
   const [input, setInput] = useState("");  // Input for email or mobile number
   const [error, setError] = useState("");  // Error message
   const [otp, setOtp] = useState("");  // OTP input
@@ -17,12 +18,15 @@ function LoginPage({ setIsLogin }) {
   const navigate = useNavigate();
 
   // Validate email or phone number
-  const validateInput = (input) => {
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    const phoneRegex = /^[0-9]{10}$/;  // 10-digit phone number validation
-    return emailRegex.test(input) || phoneRegex.test(input);
-  };
+  // const validateInput = (input) => {
+  //   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  //   const phoneRegex = /^[0-9]{10}$/;  // 10-digit phone number validation
+  //   return emailRegex.test(input) || phoneRegex.test(input);
+  // };
 
+  const validatePhone = (phone) => {
+    return /^[0-9]{10}$/.test(phone);
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -31,31 +35,26 @@ function LoginPage({ setIsLogin }) {
       return;
     }
 
-    if (mode === "signup" && !name) {
-      setError("Enter name");
+    // ✅ ADD THIS
+    if (!validatePhone(input)) {
+      setError("Please enter a valid 10-digit phone number");
       return;
     }
 
     try {
       const res = await axios.post(
-        "https://shyambackend.onrender.com/api/auth/send-otp",
-        { phone: input }
+        "http://localhost:5000/api/auth/send-otp",
+        {
+          phone: input,
+          mode: "login",
+        },
+        {
+          withCredentials: true
+        }
       );
 
       if (res.data.success) {
-
-
-        if (mode === "login" && res.data.isNewUser) {
-          setError("User not found. Please sign up.");
-          return;
-        }
-
-
-        if (mode === "signup" && !res.data.isNewUser) {
-          setError("User already exists. Please login.");
-          return;
-        }
-
+        setSessionId(res.data.sessionId);
         setStep(2);
       } else {
         setError(res.data.message);
@@ -74,22 +73,35 @@ function LoginPage({ setIsLogin }) {
       return;
     }
 
+    if (!/^[0-9]{10}$/.test(input)) {
+      setError("Please enter a valid 10-digit phone number");
+      return;
+    }
+
     try {
       const res = await axios.post(
-        "https://shyambackend.onrender.com/api/auth/verify-otp",
+        "http://localhost:5000/api/auth/verify-otp",
         {
           phone: input,
           otp,
-          name // 🔥 IMPORTANT
+          sessionId // ✅ IMPORTANT
+        },
+        {
+          withCredentials: true // ✅ IMPORTANT
         }
       );
 
       if (res.data.success) {
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("isLoggedIn", "true");
+        const user = res.data.user;
 
-        setIsLogin(true);
-        navigate("/dashboard");
+        localStorage.setItem("isLoggedIn", "true");
+        setIsLogin(true); 
+
+        if (user.role === "admin") {
+          navigate("/dashboard");
+        } else {
+          navigate("/");
+        }
       } else {
         setError(res.data.message);
       }
@@ -98,6 +110,7 @@ function LoginPage({ setIsLogin }) {
       setError("OTP verification failed");
     }
   };
+
   return (
     <div className="login-page">
       {/* LEFT */}
@@ -109,77 +122,35 @@ function LoginPage({ setIsLogin }) {
       {/* RIGHT */}
       <div className="right-section">
         <div className="login-box">
-          <h2>{mode === "signup" ? "Sign Up" : "Login"}</h2>
+          <h2>Login</h2>
           <p className="sub-text">to access your account</p>
 
           {/* Step 1: Email/Phone Input */}
           {step === 1 && (
             <form onSubmit={handleSubmit}>
 
-              {/* 🔥 SHOW NAME ONLY IN SIGNUP */}
-              {mode === "signup" && (
-                <input
-                  type="text"
-                  placeholder="Enter Name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              )}
-
               <input
                 type="text"
                 placeholder="Enter Phone Number"
                 value={input}
+                maxLength={10} // ✅ limit to 10 digits
                 onChange={(e) => {
-                  setInput(e.target.value);
+                  const value = e.target.value.replace(/\D/g, ""); // only numbers
+                  setInput(value);
                   setError("");
                 }}
               />
 
               {error && <p className="error-message">{error}</p>}
 
-              <button type="submit">
-                {mode === "signup" ? "Sign Up" : "Login"}
-              </button>
+              <button type="submit">Send OTP</button>
             </form>
           )}
 
-          <p className="switch-text">
-            {mode === "login" ? (
-              <>
-                Don't have an account?{" "}
-                <span onClick={() => {
-                  setMode("signup");
-                  setError("");
-                }}>
-                  Sign Up
-                </span>
-              </>
-            ) : (
-              <>
-                Already have an account?{" "}
-                <span onClick={() => {
-                  setMode("login");
-                  setError("");
-                }}>
-                  Login
-                </span>
-              </>
-            )}
-          </p>
+
 
           {step === 2 && (
             <form onSubmit={handleOtpSubmit}>
-
-
-              {isNewUser && (
-                <input
-                  type="text"
-                  placeholder="Enter Name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              )}
 
               <input
                 type="text"
@@ -196,16 +167,21 @@ function LoginPage({ setIsLogin }) {
               <button type="submit">Verify OTP</button>
             </form>
           )}
-          <div className="divider">or</div>
+
+          {/* <p className="switch-text">
+            
+          </p> */}
+
+          {/* <div className="divider">or</div> */}
 
           {/* Google Sign-In Button */}
-          <button className="google-btn">
+          {/* <button className="google-btn">
             <img
               src="https://cdn-icons-png.flaticon.com/512/281/281764.png"
               alt="google"
             />
             Sign in with Google
-          </button>
+          </button> */}
 
           <p className="footer-text">
             New here? <span>Contact Us</span>

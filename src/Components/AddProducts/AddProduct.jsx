@@ -180,7 +180,7 @@ function AddProduct() {
 
 
 
-      <form className="product-form" onSubmit={handleSubmit}>
+      <form className="products-form" onSubmit={handleSubmit}>
         <h2>Add Product</h2>
         <div className="form-grid">
           <div className="form-group">

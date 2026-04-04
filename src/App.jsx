@@ -15,6 +15,7 @@ import BannerList from "./Components/Addbanner/BannerList";
 import AddOffers from "./Components/Offers/AddOffers";
 import LoginPage from "./Components/Login/LoginPage";
 import OfferList from "./Components/Offers/OfferList";
+import AdsSlider from "./Components/AdsSlider/AdsSlider";
 
 function App() {
 
@@ -56,6 +57,8 @@ function App() {
               <Route path="/category" element={<Category />} />
               <Route path="/offers" element={<AddOffers />} />
               <Route path="/offer-list" element={<OfferList />} />
+              <Route path="/ads-slider" element={<AdsSlider />} />
+              {/* <Route path="/ads-list" element={} /> */}
 
             </Routes>
           </div>

@@ -160,12 +160,14 @@
 
 .error-message {
   color: #e53935;
- margin-top: -4px;
- margin-bottom: 8px;
+  margin-top: -4px;
+  margin-bottom: 8px;
   border-radius: 6px;
   font-size: 14px;
   text-align: left;
 }
+
+
 
 /* RESPONSIVE STYLES */
 @media (max-width: 768px) {

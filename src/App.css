@@ -6,6 +6,6 @@
   margin-left: 177px;
   width: 100%;
   padding: 25px;
-  /* background: #f4f6f9; */
+  background-color: var(--bg-gray);
   min-height: 100vh;
 }
