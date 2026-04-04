@@ -43,7 +43,7 @@ function LoginPage({ setIsLogin }) {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/auth/send-otp",
+        "https://shyambackend.onrender.com/api/auth/send-otp",
         {
           phone: input,
           mode: "login",
@@ -81,7 +81,7 @@ function LoginPage({ setIsLogin }) {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/auth/verify-otp",
+        "https://shyambackend.onrender.com/api/auth/verify-otp",
         {
           phone: input,
           otp,
