@@ -21,7 +21,7 @@ function App() {
 
   const [isLogin, setIsLogin] = useState(null);
 
- 
+
   useEffect(() => {
     const loginStatus = localStorage.getItem("isLoggedIn");
     if (loginStatus === "true") {
@@ -39,7 +39,7 @@ function App() {
           <Route path="*" element={<LoginPage setIsLogin={setIsLogin} />} />
         </Routes>
       ) : (
-        
+
         <div className="admin-layout">
 
           <Sidebar />
@@ -51,6 +51,7 @@ function App() {
 
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/products/add" element={<AddProduct />} />
+              <Route path="/products/edit/:id" element={<AddProduct />} />
               <Route path="/products/list" element={<ProductList />} />
               <Route path="/add-banner" element={<AddBanner />} />
               <Route path="/banner-list" element={<BannerList />} />

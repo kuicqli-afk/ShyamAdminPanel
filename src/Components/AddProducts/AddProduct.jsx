@@ -1,4 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+
+
 import { FiUpload } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 import axios from "axios";
@@ -32,6 +35,15 @@ function AddProduct() {
   const [uploadStatus, setUploadStatus] = useState("idle");
   const [categories, setCategories] = useState([]);
   const [banner, setBanner] = useState([]);
+
+  const { id } = useParams();
+
+  useEffect(() => {
+    if (id) {
+      fetchSingleProduct();
+    }
+  }, [id]);
+
   useEffect(() => {
 
     axios.get("https://shyambackend.onrender.com/api/categories/category-list")
@@ -103,12 +115,13 @@ function AddProduct() {
 
   //offers 
   const [offers, setOffers] = useState([]);
-  axios.get("https://shyambackend.onrender.com/api/offers")
-    .then((res) => {
-      setOffers(res.data.offers);
-    })
-    .catch((err) => console.log(err));
-
+  useEffect(() => {
+    axios.get("https://shyambackend.onrender.com/api/offers")
+      .then((res) => {
+        setOffers(res.data.offers);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   const handleRemoveGalleryImage = (index) => {
     const updated = [...galleryImages];
@@ -131,6 +144,37 @@ function AddProduct() {
 
     return newErrors;
   };
+
+
+  const fetchSingleProduct = async () => {
+    try {
+      const res = await axios.get(
+        `https://shyambackend.onrender.com/api/products/${id}`
+      );
+
+      const data = res.data.product;
+
+      setProduct({
+        ...initialState,
+        ...data,
+        image: null, // important
+        images: []
+      });
+
+      // preview images
+      setMainPreview(data.image);
+
+      setGalleryImages(
+        data.images?.map((img) => ({
+          preview: img
+        })) || []
+      );
+
+    } catch (err) {
+      console.log("Fetch product error", err);
+    }
+  };
+
   // submit
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -259,6 +303,17 @@ function AddProduct() {
           <div className="form-group">
             <label>Quantity</label>
             <input type="text" name="portion" value={product.portion} onChange={handleChange} />
+            
+            <div style={{ display: "flex" }}>
+              <select name="" id="">
+                <option value="">ml</option>
+                <option value="">grams</option>
+                <option value="">kg</option>
+                <option value="">liter</option>
+                <option value="">peice</option>
+              </select>
+            </div>
+
           </div>
 
           <div className="form-group">

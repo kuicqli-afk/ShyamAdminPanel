@@ -47,6 +47,7 @@ function LoginPage({ setIsLogin }) {
         {
           phone: input,
           mode: "login",
+         
         },
         {
           withCredentials: true

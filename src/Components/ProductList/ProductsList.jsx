@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { BiMenu } from "react-icons/bi";
 import { toast } from "react-toastify";
@@ -12,6 +14,8 @@ function ProductList() {
   const [selected, setSelected] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [bulkAction, setBulkAction] = useState("");
+
+  const navigate = useNavigate();
 
   // ================= FETCH =================
   const fetchProducts = async () => {
@@ -37,8 +41,8 @@ function ProductList() {
   // );
 
   const filtered = products
-  .filter((p) => p.title?.toLowerCase().includes(search.toLowerCase()))
-  .filter((p) => p.category !== null); // 🔥 ADD THIS
+    .filter((p) => p.title?.toLowerCase().includes(search.toLowerCase()))
+    .filter((p) => p.category !== null); // 🔥 ADD THIS
 
   // ================= DRAG =================
   const handleDragEnd = async (result) => {
@@ -231,8 +235,9 @@ function ProductList() {
 
                           {/* Actions */}
                           <td>
-                            <button className="edit-btn"
-                              onClick={() => window.location.href = `/products/add/${product._id}`}
+                            <button
+                              className="edit-btn"
+                              onClick={() => navigate(`/products/edit/${product._id}`)}
                             >
                               Edit
                             </button>
@@ -248,7 +253,7 @@ function ProductList() {
                               className="delete-btn"
                               onClick={() => handleDelete(product._id)}
                             >
-                              Trash
+                              Delete
                             </button>
                           </td>
                           {/* Drag */}
