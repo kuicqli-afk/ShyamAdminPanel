@@ -301,7 +301,7 @@ function AddProduct() {
 
               {banner.map((ban) => (
                 <option key={ban._id} value={ban._id}>
-                  <span>{ban.type}</span>
+                  {ban.type}
                 </option>
               ))}
 
