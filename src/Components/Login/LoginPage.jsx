@@ -21,12 +21,6 @@ function LoginPage({ setIsLogin }) {
   const [step, setStep] = useState(1);  // Track current step (1: email/phone, 2: OTP)
   const navigate = useNavigate();
 
-  // Validate email or phone number
-  // const validateInput = (input) => {
-  //   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  //   const phoneRegex = /^[0-9]{10}$/;  // 10-digit phone number validation
-  //   return emailRegex.test(input) || phoneRegex.test(input);
-  // };
 
   const validatePhone = (phone) => {
     return /^[0-9]{10}$/.test(phone);
