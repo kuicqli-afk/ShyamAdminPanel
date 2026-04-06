@@ -51,7 +51,7 @@ function AddProduct() {
       .then((res) => {
         setCategories(res.data.categories);
       })
-      .catch((err) => console.log(err));  
+      .catch((err) => console.log(err));
 
     axios.get("https://shyambackend.onrender.com/api/banner")
       .then((res) => {
@@ -209,23 +209,20 @@ function AddProduct() {
     product.images.forEach((img) => formData.append("images", img));
 
     try {
-      if (isEdit) {
-        await axios.put(
-          `https://shyambackend.onrender.com/api/products/update/${id}`,
-          formData,
-          {
-            headers: { "Content-Type": "multipart/form-data" },
-          }
-        );
-      } else {
-        await axios.post(
-          "https://shyambackend.onrender.com/api/products/add-product",
-          formData,
-          {
-            headers: { "Content-Type": "multipart/form-data" },
-          }
-        );
-      }
+      const url = isEdit
+        ? `https://shyambackend.onrender.com/api/products/update-product/${id}`
+        : "https://shyambackend.onrender.com/api/products/add-product";
+
+      const method = isEdit ? "put" : "post";
+
+      await axios({
+        method,
+        url,
+        data: formData,
+        headers: { "Content-Type": "multipart/form-data" }
+      });
+
+      toast.success(isEdit ? "Product updated" : "Product added"); // ✅ ADD
 
       setUploadStatus("success");
       setProduct(initialState);
@@ -233,8 +230,10 @@ function AddProduct() {
       setGalleryImages([]);
       setErrors({});
       setTimeout(() => setUploadStatus("idle"), 2000);
+
     } catch (err) {
       console.error(err);
+      toast.error("Upload failed"); // ✅ ADD
       setUploadStatus("idle");
     }
   };
@@ -346,7 +345,7 @@ function AddProduct() {
 
 
           <div className="form-group">
-            <label>Price</label>
+            <label>Selling Price</label>
             <input type="number" name="price" value={product.price} onChange={handleChange} />
             {errors.price && <p className="error">{errors.price}</p>}
           </div>
