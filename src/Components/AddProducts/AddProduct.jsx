@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-
+import { toast } from "react-toastify";
 
 import { FiUpload } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
@@ -37,6 +37,7 @@ function AddProduct() {
   const [banner, setBanner] = useState([]);
 
   const { id } = useParams();
+  const isEdit = !!id;
 
   useEffect(() => {
     if (id) {
@@ -50,7 +51,7 @@ function AddProduct() {
       .then((res) => {
         setCategories(res.data.categories);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err));  
 
     axios.get("https://shyambackend.onrender.com/api/banner")
       .then((res) => {
@@ -140,7 +141,9 @@ function AddProduct() {
     if (!product.category) newErrors.category = "Category required";
     if (!product.title.trim()) newErrors.title = "Product name required";
     if (!product.price) newErrors.price = "Price required";
-    if (!product.image) newErrors.image = "Main image required";
+    if (!product.image && !mainPreview) {
+      newErrors.image = "Main image required";
+    }
 
     return newErrors;
   };
@@ -190,6 +193,12 @@ function AddProduct() {
       : [];
 
     const formData = new FormData();
+    formData.append("existingImage", mainPreview || "");
+
+    formData.append(
+      "existingGallery",
+      JSON.stringify(galleryImages.map((img) => img.preview))
+    );
     Object.keys(product).forEach((key) => {
       if (key !== "images" && key !== "image" && key !== "slots") {
         formData.append(key, product[key]);
@@ -200,13 +209,23 @@ function AddProduct() {
     product.images.forEach((img) => formData.append("images", img));
 
     try {
-      await axios.post(
-        "https://shyambackend.onrender.com/api/products/add-product",
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
+      if (isEdit) {
+        await axios.put(
+          `https://shyambackend.onrender.com/api/products/update/${id}`,
+          formData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          }
+        );
+      } else {
+        await axios.post(
+          "https://shyambackend.onrender.com/api/products/add-product",
+          formData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          }
+        );
+      }
 
       setUploadStatus("success");
       setProduct(initialState);
@@ -225,7 +244,7 @@ function AddProduct() {
 
 
       <form className="products-form" onSubmit={handleSubmit}>
-        <h2>Add Product</h2>
+        <h2>{isEdit ? "Edit Product" : "Add Product"}</h2>
         <div className="form-grid">
           <div className="form-group">
 
@@ -303,7 +322,7 @@ function AddProduct() {
           <div className="form-group">
             <label>Quantity</label>
             <input type="text" name="portion" value={product.portion} onChange={handleChange} />
-            
+
             <div style={{ display: "flex" }}>
               <select name="" id="">
                 <option value="">ml</option>
@@ -461,7 +480,9 @@ function AddProduct() {
           className="submit-btn"
           disabled={uploadStatus === "uploading"}
         >
-          {uploadStatus === "idle" ? "Add Product" : "Uploading Products..."}
+          {uploadStatus === "uploading"
+            ? (id ? "Updating..." : "Adding...")
+            : (id ? "Update Product" : "Add Product")}
         </button>
       </form>
 
