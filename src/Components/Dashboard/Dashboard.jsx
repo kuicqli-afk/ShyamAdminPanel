@@ -24,7 +24,7 @@ function Dashboard() {
 
   const fetchDashboard = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/admin/dashboard", {
+      const res = await axios.get("https://shyambackend.onrender.com/api/admin/dashboard", {
         withCredentials: true
       });
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./LoginPage.css";
 import img from "../../assets/login.png"; // Adjust path as needed
 import { useNavigate } from "react-router-dom";
@@ -9,8 +9,12 @@ function LoginPage({ setIsLogin }) {
 
   // const [mode, setMode] = useState("login"); // "login" or "signup"
   // const [name, setName] = useState("");
-  const [sessionId, setSessionId] = useState("");
+  // const [sessionId, setSessionId] = useState("");
   // const [isNewUser, setIsNewUser] = useState(false);
+
+  const [timer, setTimer] = useState(30);
+  const [canResend, setCanResend] = useState(false);
+
   const [input, setInput] = useState("");  // Input for email or mobile number
   const [error, setError] = useState("");  // Error message
   const [otp, setOtp] = useState("");  // OTP input
@@ -47,7 +51,7 @@ function LoginPage({ setIsLogin }) {
         {
           phone: input,
           mode: "login",
-         
+
         },
         {
           withCredentials: true
@@ -55,8 +59,9 @@ function LoginPage({ setIsLogin }) {
       );
 
       if (res.data.success) {
-        setSessionId(res.data.sessionId);
         setStep(2);
+        setTimer(30);
+        setCanResend(false);
       } else {
         setError(res.data.message);
       }
@@ -85,7 +90,7 @@ function LoginPage({ setIsLogin }) {
         {
           phone: input,
           otp,
-          sessionId // ✅ IMPORTANT
+          // sessionId // ✅ IMPORTANT
         },
         {
           withCredentials: true // ✅ IMPORTANT
@@ -95,8 +100,8 @@ function LoginPage({ setIsLogin }) {
       if (res.data.success) {
         const user = res.data.user;
 
-        localStorage.setItem("isLoggedIn", "true");
-        setIsLogin(true); 
+        // localStorage.setItem("isLoggedIn", "true");
+        setIsLogin(true);
 
         if (user.role === "admin") {
           navigate("/dashboard");
@@ -110,7 +115,47 @@ function LoginPage({ setIsLogin }) {
     } catch (err) {
       setError("OTP verification failed");
     }
+
   };
+
+  useEffect(() => {
+    let interval;
+
+    if (step === 2 && timer > 0) {
+      interval = setInterval(() => {
+        setTimer(prev => prev - 1);
+      }, 1000);
+    }
+
+    if (timer === 0) {
+      setCanResend(true);
+    }
+
+    return () => clearInterval(interval);
+  }, [step, timer]);
+
+  const handleResend = async () => {
+    try {
+      const res = await axios.post(
+        "https://shyambackend.onrender.com/api/auth/resend-otp",
+        { phone: input },
+        { withCredentials: true }
+      );
+
+      if (res.data.success) {
+        setTimer(60);
+        setCanResend(false);
+        setError("");
+      } else {
+        setError(res.data.message);
+      }
+
+    } catch (err) {
+      setError("Resend failed");
+    }
+  };
+
+
 
   return (
     <div className="login-page">
@@ -165,7 +210,18 @@ function LoginPage({ setIsLogin }) {
 
               {error && <p className="error-message">{error}</p>}
 
+ <p className="resend-text">
+                {timer > 0 ? (
+                  `Resend OTP in ${timer}s`
+                ) : (
+                  <span onClick={handleResend} style={{ cursor: "pointer", color: "blue" }}>
+                    Resend OTP
+                  </span>
+                )}
+              </p>
               <button type="submit">Verify OTP</button>
+
+             
             </form>
           )}
 
