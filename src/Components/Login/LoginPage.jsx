@@ -143,7 +143,7 @@ function LoginPage({ setIsLogin }) {
       );
 
       if (res.data.success) {
-        setTimer(60);
+        setTimer(30);
         setCanResend(false);
         setError("");
       } else {
