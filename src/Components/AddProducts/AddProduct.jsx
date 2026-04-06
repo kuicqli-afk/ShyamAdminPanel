@@ -6,6 +6,7 @@ import { FiUpload } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 import axios from "axios";
 import "./AddProduct.css";
+// import { appendOffsetOfLegend } from "recharts/types/util/ChartUtils";
 
 function AddProduct() {
 
@@ -161,7 +162,8 @@ function AddProduct() {
         ...initialState,
         ...data,
         image: null, // important
-        images: []
+        images: [],
+        slots: data.slots ? data.slots.join(",") : ""  // <-- convert array to string
       });
 
       // preview images
@@ -181,49 +183,70 @@ function AddProduct() {
   // submit
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const validationErrors = validateForm();
-    setErrors(validationErrors); // show errors
 
-    if (Object.keys(validationErrors).length > 0) return; // stop if invalid
-    // Start uploading
+    const validationErrors = validateForm();
+    setErrors(validationErrors);
+    if (Object.keys(validationErrors).length > 0) return;
+
     setUploadStatus("uploading");
 
-    const slotArray = product.slots
-      ? product.slots.split(",").map((s) => s.trim())
-      : [];
-
-    const formData = new FormData();
-    formData.append("existingImage", mainPreview || "");
-
-    formData.append(
-      "existingGallery",
-      JSON.stringify(galleryImages.map((img) => img.preview))
-    );
-    Object.keys(product).forEach((key) => {
-      if (key !== "images" && key !== "image" && key !== "slots") {
-        formData.append(key, product[key]);
-      }
-    });
-    formData.append("slots", slotArray.join(","));
-    if (product.image) formData.append("image", product.image);
-    product.images.forEach((img) => formData.append("images", img));
-
     try {
+      // Prepare slots as array
+      const slotArray = product.slots
+        ? product.slots.split(",").map((s) => s.trim())
+        : [];
+
+      // Prepare FormData
+      const formData = new FormData();
+
+      // Append new main image if exists
+      if (product.image) formData.append("image", product.image);
+
+      // Append gallery files
+      product.images.forEach((img) => formData.append("images", img));
+
+      // Existing main image URL
+      formData.append("existingImage", mainPreview || "");
+
+      // Existing gallery URLs
+      formData.append(
+        "existingGallery",
+        JSON.stringify(galleryImages.map((img) => img.preview))
+      );
+
+      // Append other fields (avoid null/undefined)
+      Object.keys(product).forEach((key) => {
+        if (!["image", "images", "slots"].includes(key)) {
+          formData.append(key, product[key] ?? "");
+        }
+      });
+
+      // Append slots as array
+      slotArray.forEach((s) => formData.append("slots[]", s));
+
+      // Determine URL & method
       const url = isEdit
         ? `https://shyambackend.onrender.com/api/products/update-product/${id}`
         : "https://shyambackend.onrender.com/api/products/add-product";
 
       const method = isEdit ? "put" : "post";
 
+      // Debug: log FormData
+      // for (let pair of formData.entries()) {
+      //   console.log(pair[0], pair[1]);
+      // }
+
+      // Send request
       await axios({
         method,
         url,
         data: formData,
-        headers: { "Content-Type": "multipart/form-data" }
+        headers: { "Content-Type": "multipart/form-data" },
       });
 
-      toast.success(isEdit ? "Product updated" : "Product added"); // ✅ ADD
+      toast.success(isEdit ? "Product updated" : "Product added");
 
+      // Reset form
       setUploadStatus("success");
       setProduct(initialState);
       setMainPreview(null);
@@ -232,8 +255,8 @@ function AddProduct() {
       setTimeout(() => setUploadStatus("idle"), 2000);
 
     } catch (err) {
-      console.error(err);
-      toast.error("Upload failed"); // ✅ ADD
+      console.error("Upload error:", err.response?.data || err);
+      toast.error(err.response?.data?.message || "Upload failed");
       setUploadStatus("idle");
     }
   };
