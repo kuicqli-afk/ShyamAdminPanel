@@ -210,18 +210,18 @@ function LoginPage({ setIsLogin }) {
 
               {error && <p className="error-message">{error}</p>}
 
- <p className="resend-text">
-                {timer > 0 ? (
-                  `Resend OTP in ${timer}s`
-                ) : (
-                  <span onClick={handleResend} style={{ cursor: "pointer", color: "blue" }}>
-                    Resend OTP
-                  </span>
-                )}
+              <p className="resend-text">
+                {timer > 0 && `Resend OTP in ${timer}s`}
               </p>
-              <button type="submit">Verify OTP</button>
 
-             
+              <button
+                type={timer > 0 ? "submit" : "button"}
+                onClick={timer === 0 ? handleResend : undefined}
+              >
+                {timer > 0 ? "Verify OTP" : "Resend OTP"}
+              </button>
+
+
             </form>
           )}
 
