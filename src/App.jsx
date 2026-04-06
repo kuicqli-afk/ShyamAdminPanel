@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import axios from "axios";
 
 import "./App.css";
 import { ToastContainer } from "react-toastify";
@@ -23,21 +22,11 @@ function App() {
   const [isLogin, setIsLogin] = useState(null);
 
 
-
   useEffect(() => {
-    axios.get("https://shyambackend.onrender.com/api/auth/me", {
-      withCredentials: true
-    })
-      .then(res => {
-        if (res.data.success) {
-          setIsLogin(true);
-        } else {
-          setIsLogin(false);
-        }
-      })
-      .catch(() => {
-        setIsLogin(false);
-      });
+    const loginStatus = localStorage.getItem("isLoggedIn");
+    if (loginStatus === "true") {
+      setIsLogin(true);
+    }
   }, []);
 
   return (

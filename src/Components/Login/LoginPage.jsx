@@ -9,7 +9,7 @@ function LoginPage({ setIsLogin }) {
 
   // const [mode, setMode] = useState("login"); // "login" or "signup"
   // const [name, setName] = useState("");
-  // const [sessionId, setSessionId] = useState("");
+  const [sessionId, setSessionId] = useState("");
   // const [isNewUser, setIsNewUser] = useState(false);
 
   const [timer, setTimer] = useState(30);
@@ -53,6 +53,7 @@ function LoginPage({ setIsLogin }) {
       );
 
       if (res.data.success) {
+        setSessionId(res.data.sessionId); // ✅ ADD THIS
         setStep(2);
         setTimer(30);
         setCanResend(false);
@@ -84,7 +85,7 @@ function LoginPage({ setIsLogin }) {
         {
           phone: input,
           otp,
-          // sessionId // ✅ IMPORTANT
+          sessionId // ✅ IMPORTANT
         },
         {
           withCredentials: true // ✅ IMPORTANT
@@ -94,7 +95,7 @@ function LoginPage({ setIsLogin }) {
       if (res.data.success) {
         const user = res.data.user;
 
-        // localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("isLoggedIn", "true");
         setIsLogin(true);
 
         if (user.role === "admin") {
@@ -137,6 +138,7 @@ function LoginPage({ setIsLogin }) {
       );
 
       if (res.data.success) {
+        setSessionId(res.data.sessionId); // ✅ IMPORTANT
         setTimer(30);
         setCanResend(false);
         setError("");
